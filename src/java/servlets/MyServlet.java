@@ -17,7 +17,12 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Melnikov
  */
-@WebServlet(name = "MyServlet", urlPatterns = {"/MyServlet"})
+@WebServlet(name = "MyServlet", urlPatterns = {
+    "/page1",
+    "/page2",
+    "/page3",
+    
+})
 public class MyServlet extends HttpServlet {
 
     /**
@@ -32,17 +37,13 @@ public class MyServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet MyServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet MyServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        String path = request.getServletPath();
+        if("/page1".equals(path)){
+            request.getRequestDispatcher("/page1.jsp").forward(request, response);
+        }else if("/page2".equals(path)){
+            request.getRequestDispatcher("/WEB-INF/page2.jsp").forward(request, response);
+        }else if("/page3".equals(path)){
+            request.getRequestDispatcher("/WEB-INF/page3.jsp").forward(request, response);
         }
     }
 
