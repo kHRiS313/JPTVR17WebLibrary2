@@ -13,6 +13,7 @@
     </head>
     <body>
         <h1>Привет из сервлета!</h1>
+        <p>${info}</p>
         <p>page3.jsp</p>
     </body>
 </html>

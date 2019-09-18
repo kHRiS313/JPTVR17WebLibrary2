@@ -17,12 +17,10 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Melnikov
  */
-@WebServlet(name = "MyServlet", urlPatterns = {
-    "/page1",
-    "/page3",
-    
+@WebServlet(name = "MySerblet2", urlPatterns = {
+    "/page2",
 })
-public class MyServlet extends HttpServlet {
+public class MySerblet2 extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,16 +34,39 @@ public class MyServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
+        request.setAttribute("info", "Привет из MyServlet2");
         String path = request.getServletPath();
-        if("/page1".equals(path)){
-            String num = request.getParameter("num");
-            request.setAttribute("num", num);
-            request.setAttribute("info", "Здророва ребята. Я страничка первая!");
-            request.getRequestDispatcher("/page1.jsp").forward(request, response);
-        }else if("/page3".equals(path)){
-            request.setAttribute("info", "Эхе-хе, я третья страница!");
-            request.getRequestDispatcher("/WEB-INF/page3.jsp").forward(request, response);
+        switch (path) {
+            case "/page2":
+                String num1 = request.getParameter("num1");
+                String num2 = request.getParameter("num2");
+                String znak = request.getParameter("znak");
+                Integer res=0;
+                if(num1 != null || num2 != null){
+                    switch (znak) {
+                        case "+":
+                            res = new Integer(num1) + new Integer(num2);
+                            break;
+                        case "-":
+                            res = new Integer(num1) - new Integer(num2);
+                            break;
+                        case "*":
+                            res = new Integer(num1) * new Integer(num2);
+                            break;
+                        case "/":
+                            res = new Integer(num1) / new Integer(num2);
+                            break;
+                        
+                    }
+                    
+                    request.setAttribute("num1", num1);
+                    request.setAttribute("num2", num2);
+                    request.setAttribute("res", res);
+                }
+                
+                request.getRequestDispatcher("/WEB-INF/page2.jsp")
+                        .forward(request, response);
+                break;
         }
     }
 

@@ -13,6 +13,10 @@
     </head>
     <body>
         <h1>Привет из вервлета!</h1>
+        <p>${info}</p>
         <p>page1.jsp</p>
+        <a href="page1?num=1">Один</a>
+        <a href="page1?num=2">Два</a>
+        <p>В нажали на ${num}</p>
     </body>
 </html>
