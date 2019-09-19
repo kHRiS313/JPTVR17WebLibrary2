@@ -1,7 +1,7 @@
 <%-- 
-    Document   : page1
-    Created on : Sep 16, 2019, 10:04:33 AM
-    Author     : melnikov
+    Document   : listBooks
+    Created on : Sep 19, 2019, 10:54:00 AM
+    Author     : Melnikov
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -12,8 +12,6 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Привет из сервлета!</h1>
-        <p>${info}</p>
-        <p>page3.jsp</p>
+        <h1>Hello World!</h1>
     </body>
 </html>

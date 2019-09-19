@@ -5,6 +5,7 @@
  */
 package servlets;
 
+import entity.Book;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -17,10 +18,17 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Melnikov
  */
-@WebServlet(name = "MySerblet2", urlPatterns = {
-    "/page2",
+@WebServlet(name = "WebController", urlPatterns = {
+    "/newBook",
+    "/addBook",
+    "/newReader",
+    "/listBooks",
+    "/listReaders",
+    "/takeBook",
+    "/returnBook",
+    
 })
-public class MySerblet2 extends HttpServlet {
+public class WebController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,39 +42,38 @@ public class MySerblet2 extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        request.setAttribute("info", "Привет из MyServlet2");
+        request.setCharacterEncoding("UTF-8");
         String path = request.getServletPath();
         switch (path) {
-            case "/page2":
-                String num1 = request.getParameter("num1");
-                String num2 = request.getParameter("num2");
-                String znak = request.getParameter("znak");
-                double res=0.0;
-                if(num1 != null || num2 != null){
-                    switch (znak) {
-                        case "+":
-                            res =(double)( new Double(num1) + new Double(num2));
-                            break;
-                        case "-":
-                            res = (double)(new Double(num1) - new Double(num2));
-                            break;
-                        case "*":
-                            res = (double)(new Double(num1) * new Double(num2));
-                            break;
-                        case "/":
-                            res = new Double(num1) / new Double(num2);
-                            break;
-                    }
-                    
-                    request.setAttribute("num1", num1);
-                    request.setAttribute("num2", num2);
-                    request.setAttribute("res", res);
-                    request.setAttribute("znak", znak);
-                }
-                
-                request.getRequestDispatcher("/WEB-INF/page2.jsp")
-                        .forward(request, response);
+            case "/newBook":
+                request.getRequestDispatcher("/newBook.jsp").forward(request, response);
                 break;
+            case "/addBook":
+                String name = request.getParameter("name");
+                String author = request.getParameter("author");
+                String publichedYear = request.getParameter("publishedYear");
+                String isbn = request.getParameter("isbn");
+                Book book = new Book(null, name, author, isbn, new Integer(publichedYear));
+                //Запись данных в базу
+                request.setAttribute("book", book);
+                request.getRequestDispatcher("/newBook.jsp").forward(request, response);
+                break;
+            case "/newReader":
+                request.getRequestDispatcher("/newReader.jsp").forward(request, response);
+                break;
+            case "/listBooks":
+                request.getRequestDispatcher("/listBooks.jsp").forward(request, response);
+                break;
+            case "/listReaders":
+                request.getRequestDispatcher("/listReaders.jsp").forward(request, response);
+                break;
+            case "/takeBook":
+                request.getRequestDispatcher("/takeBook.jsp").forward(request, response);
+                break;
+            case "/returnBook":
+                request.getRequestDispatcher("/returnBook.jsp").forward(request, response);
+                break;
+            
         }
     }
 
