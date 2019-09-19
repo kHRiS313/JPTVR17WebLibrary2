@@ -4,6 +4,8 @@
     Author     : melnikov
 --%>
 
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -16,19 +18,18 @@
         <p>${info}</p>
         <p>page2.jsp</p>
         <form action="page2" method="POST">
-            Номер 1: <input type="text" name="num1"><br>
-            Номер 2: <input type="text" name="num2"><br>
+            Номер 1: <input type="text" name="num1" value="${num1}"><br>
+            Номер 2: <input type="text" name="num2" value="${num2}"><br>
             Операция: <select name="znak">
-                <option value="+">+</option>
-                <option value="-">-</option>
-                <option value="*">*</option>
-                <option value="/">/</option>
+                <option value="+" <c:if test="${znak eq '+'}">selected </c:if>>+</option>
+                <option value="-" <c:if test="${znak eq '-'}">selected </c:if>>-</option>
+                <option value="*" <c:if test="${znak eq '*'}">selected</c:if>>*</option>
+                <option value="/" <c:if test="${znak eq '/'}">selected</c:if>>/</option>
             </select>
             <input type="submit" value="Отправить на сервер">
             
         </form>
-        <p>num 1 = ${num1}</p>
-        <p>num 2 = ${num2}</p>
-        <p>результат ${res}</p>
+        <p>результат: <fmt:formatNumber value="${res}" pattern="###.###"/></p>
+                
     </body>
 </html>

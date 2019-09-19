@@ -41,27 +41,27 @@ public class MySerblet2 extends HttpServlet {
                 String num1 = request.getParameter("num1");
                 String num2 = request.getParameter("num2");
                 String znak = request.getParameter("znak");
-                Integer res=0;
+                double res=0.0;
                 if(num1 != null || num2 != null){
                     switch (znak) {
                         case "+":
-                            res = new Integer(num1) + new Integer(num2);
+                            res =(double)( new Double(num1) + new Double(num2));
                             break;
                         case "-":
-                            res = new Integer(num1) - new Integer(num2);
+                            res = (double)(new Double(num1) - new Double(num2));
                             break;
                         case "*":
-                            res = new Integer(num1) * new Integer(num2);
+                            res = (double)(new Double(num1) * new Double(num2));
                             break;
                         case "/":
-                            res = new Integer(num1) / new Integer(num2);
+                            res = new Double(num1) / new Double(num2);
                             break;
-                        
                     }
                     
                     request.setAttribute("num1", num1);
                     request.setAttribute("num2", num2);
                     request.setAttribute("res", res);
+                    request.setAttribute("znak", znak);
                 }
                 
                 request.getRequestDispatcher("/WEB-INF/page2.jsp")
