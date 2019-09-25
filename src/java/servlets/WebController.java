@@ -7,12 +7,14 @@ package servlets;
 
 import entity.Book;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.List;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import session.BookFacade;
 
 /**
  *
@@ -29,7 +31,7 @@ import javax.servlet.http.HttpServletResponse;
     
 })
 public class WebController extends HttpServlet {
-
+@EJB BookFacade bookFacade;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -55,13 +57,17 @@ public class WebController extends HttpServlet {
                 String isbn = request.getParameter("isbn");
                 Book book = new Book(null, name, author, isbn, new Integer(publichedYear));
                 //Запись данных в базу
+                bookFacade.create(book);
                 request.setAttribute("book", book);
+                
                 request.getRequestDispatcher("/newBook.jsp").forward(request, response);
                 break;
             case "/newReader":
                 request.getRequestDispatcher("/newReader.jsp").forward(request, response);
                 break;
             case "/listBooks":
+                List<Book> listBooks = bookFacade.findAll();
+                request.setAttribute("listBooks", listBooks);
                 request.getRequestDispatcher("/listBooks.jsp").forward(request, response);
                 break;
             case "/listReaders":
