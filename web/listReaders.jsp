@@ -4,6 +4,7 @@
     Author     : Melnikov
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -12,6 +13,11 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <h1>Список читателей</h1>
+        <ul>
+            <c:forEach var="reader" items="${listReaders}">
+                <li>Читатель: ${reader.name} ${reader.surname}. Еелефон: ${reader.phone}</li>
+            </c:forEach>
+        </ul>
     </body>
 </html>

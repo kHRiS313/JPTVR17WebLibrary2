@@ -16,7 +16,9 @@
         <h1>Список книг библиотеки</h1>
         <ul>
             <c:forEach var="book" items="${listBooks}">
-                <li>Название: ${book.name}. Автор: ${book.author}. Год издания: ${book.publishedYear}</li>
+                <li>
+                    Название: ${book.name} <a href="showBook?id=${book.id}">Показать</a>
+                </li>
             </c:forEach>
         </ul>
     </body>

@@ -6,6 +6,7 @@
 package servlets;
 
 import entity.Book;
+import entity.Reader;
 import java.io.IOException;
 import java.util.List;
 import javax.ejb.EJB;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import session.BookFacade;
+import session.ReaderFacade;
 
 /**
  *
@@ -24,7 +26,11 @@ import session.BookFacade;
     "/newBook",
     "/addBook",
     "/newReader",
+    "/addReader",
     "/listBooks",
+    "/showBook",
+    "/editBook",
+    "/changeBook",
     "/listReaders",
     "/takeBook",
     "/returnBook",
@@ -32,6 +38,7 @@ import session.BookFacade;
 })
 public class WebController extends HttpServlet {
 @EJB BookFacade bookFacade;
+@EJB ReaderFacade readerFacade;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -59,10 +66,19 @@ public class WebController extends HttpServlet {
                 //Запись данных в базу
                 bookFacade.create(book);
                 request.setAttribute("book", book);
-                
                 request.getRequestDispatcher("/newBook.jsp").forward(request, response);
                 break;
             case "/newReader":
+                request.getRequestDispatcher("/newReader.jsp").forward(request, response);
+                break;
+            case "/addReader":
+                name = request.getParameter("name");
+                String surname = request.getParameter("surname");
+                String phone = request.getParameter("phone");
+                Reader reader = new Reader(null, name, surname, phone);
+                //Запись данных в базу
+                readerFacade.create(reader);
+                request.setAttribute("reader", reader);
                 request.getRequestDispatcher("/newReader.jsp").forward(request, response);
                 break;
             case "/listBooks":
@@ -70,7 +86,37 @@ public class WebController extends HttpServlet {
                 request.setAttribute("listBooks", listBooks);
                 request.getRequestDispatcher("/listBooks.jsp").forward(request, response);
                 break;
+            case "/showBook":
+                String bookId = request.getParameter("id");
+                book = bookFacade.find(Long.parseLong(bookId));
+                request.setAttribute("book", book);
+                request.getRequestDispatcher("/showBook.jsp").forward(request, response);
+                break;
+            case "/editBook":
+                bookId = request.getParameter("id");
+                book = bookFacade.find(Long.parseLong(bookId));
+                request.setAttribute("book", book);
+                request.getRequestDispatcher("/editBook.jsp").forward(request, response);
+                break;
+            case "/changeBook":
+                String id = request.getParameter("id");
+                name = request.getParameter("name");
+                author = request.getParameter("author");
+                publichedYear = request.getParameter("publishedYear");
+                isbn = request.getParameter("isbn");
+                book = bookFacade.find(Long.parseLong(id));
+                book.setName(name);
+                book.setAuthor(author);
+                book.setPublishedYear(Integer.parseInt(publichedYear));
+                book.setIsbn(isbn);
+                bookFacade.edit(book);
+                request.setAttribute("book", book);
+                request.setAttribute("info", "Книга изменена!");
+                request.getRequestDispatcher("/editBook.jsp").forward(request, response);
+                break;
             case "/listReaders":
+                List<Reader> listReaders = readerFacade.findAll();
+                request.setAttribute("listReaders", listReaders);
                 request.getRequestDispatcher("/listReaders.jsp").forward(request, response);
                 break;
             case "/takeBook":
