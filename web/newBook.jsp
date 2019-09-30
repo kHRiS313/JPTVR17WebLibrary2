@@ -18,6 +18,7 @@
             Автор книги: <input type="text" name="author"><br>
             Год издания: <input type="text" name="publishedYear"><br>
             ISBN: <input type="text" name="isbn"><br>
+            Количество экземпляров: <input type="text" name="quantity"><br>
             <input type="submit" value="Добавить книгу">
         </form>
         <p>Добавлена книга: ${book}</p>

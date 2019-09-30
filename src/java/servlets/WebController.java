@@ -6,8 +6,10 @@
 package servlets;
 
 import entity.Book;
+import entity.History;
 import entity.Reader;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -16,6 +18,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import session.BookFacade;
+import session.HistoryFacade;
 import session.ReaderFacade;
 
 /**
@@ -27,18 +30,23 @@ import session.ReaderFacade;
     "/addBook",
     "/newReader",
     "/addReader",
+    "/editReader",
+    "/changeReader",
     "/listBooks",
     "/showBook",
     "/editBook",
     "/changeBook",
     "/listReaders",
     "/takeBook",
+    "/doTakeBook",
     "/returnBook",
+    "/doReturnBook",
     
 })
 public class WebController extends HttpServlet {
 @EJB BookFacade bookFacade;
 @EJB ReaderFacade readerFacade;
+@EJB HistoryFacade historyFacade;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -62,7 +70,8 @@ public class WebController extends HttpServlet {
                 String author = request.getParameter("author");
                 String publichedYear = request.getParameter("publishedYear");
                 String isbn = request.getParameter("isbn");
-                Book book = new Book(null, name, author, isbn, new Integer(publichedYear));
+                String quantity = request.getParameter("quantity");
+                Book book = new Book( name, author, isbn, new Integer(publichedYear),Integer.parseInt(quantity));
                 //Запись данных в базу
                 bookFacade.create(book);
                 request.setAttribute("book", book);
@@ -81,6 +90,7 @@ public class WebController extends HttpServlet {
                 request.setAttribute("reader", reader);
                 request.getRequestDispatcher("/newReader.jsp").forward(request, response);
                 break;
+
             case "/listBooks":
                 List<Book> listBooks = bookFacade.findAll();
                 request.setAttribute("listBooks", listBooks);
@@ -104,11 +114,13 @@ public class WebController extends HttpServlet {
                 author = request.getParameter("author");
                 publichedYear = request.getParameter("publishedYear");
                 isbn = request.getParameter("isbn");
+                quantity = request.getParameter("quantity");
                 book = bookFacade.find(Long.parseLong(id));
                 book.setName(name);
                 book.setAuthor(author);
                 book.setPublishedYear(Integer.parseInt(publichedYear));
                 book.setIsbn(isbn);
+                book.setQuantity(Integer.parseInt(quantity));
                 bookFacade.edit(book);
                 request.setAttribute("book", book);
                 request.setAttribute("info", "Книга изменена!");
@@ -119,11 +131,70 @@ public class WebController extends HttpServlet {
                 request.setAttribute("listReaders", listReaders);
                 request.getRequestDispatcher("/listReaders.jsp").forward(request, response);
                 break;
+            case "/editReader":
+                id = request.getParameter("id");
+                reader = readerFacade.find(Long.parseLong(id));
+                request.setAttribute("reader", reader);
+                request.getRequestDispatcher("/editReader.jsp")
+                        .forward(request, response);
+                break;
+            case "/changeReader":
+                id = request.getParameter("id");
+                name = request.getParameter("name");
+                surname = request.getParameter("surname");
+                phone = request.getParameter("phone");
+                reader = readerFacade.find(Long.parseLong(id));
+                reader.setName(name);
+                reader.setSurname(surname);
+                reader.setPhone(phone);
+                //Запись данных в базу
+                readerFacade.edit(reader);
+                request.setAttribute("reader", reader);
+                request.getRequestDispatcher("/listReaders").forward(request, response);
+                break;
             case "/takeBook":
+                listBooks = bookFacade.findTakeBook();
+                listReaders = readerFacade.findAll();
+                request.setAttribute("listBooks", listBooks);
+                request.setAttribute("listReaders", listReaders);
                 request.getRequestDispatcher("/takeBook.jsp").forward(request, response);
                 break;
+            case "/doTakeBook":
+                String readerId = request.getParameter("readerId");
+                bookId = request.getParameter("bookId");
+                reader = readerFacade.find(Long.parseLong(readerId));
+                book = bookFacade.find(Long.parseLong(bookId));
+                if(book.getQuantity()>0){
+                    book.setQuantity(book.getQuantity()-1);
+                    bookFacade.edit(book);
+                    History history = new History();
+                    history.setBook(book);
+                    history.setReader(reader);
+                    history.setTakeBook(new Date());
+                    historyFacade.create(history);
+                    request.setAttribute("info", "Книга выдана");
+                }else{
+                    request.setAttribute("info", "Книги нет в наличии");
+                }
+                request.getRequestDispatcher("/takeBook")
+                        .forward(request, response);
+                break;
             case "/returnBook":
-                request.getRequestDispatcher("/returnBook.jsp").forward(request, response);
+                List<History> listHistories = historyFacade.findNotReturnedBook();
+                request.setAttribute("listHistories", listHistories);
+                request.getRequestDispatcher("/returnBook.jsp")
+                        .forward(request, response);
+                break;
+            case "/doReturnBook":
+                String historyId = request.getParameter("historyId");
+                History history = historyFacade.find(Long.parseLong(historyId));
+                history.setReturnBook(new Date());
+                book = history.getBook();
+                book.setQuantity(book.getQuantity()+1);
+                bookFacade.edit(book);
+                historyFacade.edit(history);
+                request.getRequestDispatcher("/returnBook")
+                        .forward(request, response);
                 break;
             
         }

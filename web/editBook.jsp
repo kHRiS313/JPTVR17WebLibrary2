@@ -20,6 +20,7 @@
             Автор книги: <input type="text" name="author" value="${book.author}"><br>
             Год издания: <input type="text" name="publishedYear"  value="${book.publishedYear}"><br>
             ISBN: <input type="text" name="isbn" value="${book.isbn}"><br>
+            Количество экземпляров: <input type="text" name="quantity" value="${book.quantity}"><br>
             <input type="submit" value="Сохранить изменения">
         </form>
     </body>

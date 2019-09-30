@@ -6,7 +6,6 @@
 package entity;
 
 import java.io.Serializable;
-import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -25,24 +24,17 @@ public class Book implements Serializable{
     private String author;
     private String isbn;
     private int publishedYear;
+    private int quantity;
 
     public Book() {
     }
 
-    public Book(Long id, String name, String author, String isbn, int publishedYear) {
-        this.id = id;
+    public Book(String name, String author, String isbn, int publishedYear, int quantity) {
         this.name = name;
         this.author = author;
         this.isbn = isbn;
         this.publishedYear = publishedYear;
-    }
-
-    public int getPublishedYear() {
-        return publishedYear;
-    }
-
-    public void setPublishedYear(int publishedYear) {
-        this.publishedYear = publishedYear;
+        this.quantity = quantity;
     }
 
     public Long getId() {
@@ -77,56 +69,27 @@ public class Book implements Serializable{
         this.isbn = isbn;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 5;
-        hash = 17 * hash + Objects.hashCode(this.id);
-        hash = 17 * hash + Objects.hashCode(this.name);
-        hash = 17 * hash + Objects.hashCode(this.author);
-        hash = 17 * hash + Objects.hashCode(this.isbn);
-        hash = 17 * hash + this.publishedYear;
-        return hash;
+    public int getPublishedYear() {
+        return publishedYear;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Book other = (Book) obj;
-        if (this.publishedYear != other.publishedYear) {
-            return false;
-        }
-        if (!Objects.equals(this.name, other.name)) {
-            return false;
-        }
-        if (!Objects.equals(this.author, other.author)) {
-            return false;
-        }
-        if (!Objects.equals(this.isbn, other.isbn)) {
-            return false;
-        }
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
-        return true;
+    public void setPublishedYear(int publishedYear) {
+        this.publishedYear = publishedYear;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     @Override
     public String toString() {
-        return "Book{" + "id=" + id 
-                + ", name=" + name 
-                + ", author=" + author 
-                + ", isbn=" + isbn 
-                + ", publishedYear=" + publishedYear 
-                + '}';
+        return "Book{" + "id=" + id + ", name=" + name + ", author=" + author + ", isbn=" + isbn + ", publishedYear=" + publishedYear + ", quantity=" + quantity + '}';
     }
+
     
     
     

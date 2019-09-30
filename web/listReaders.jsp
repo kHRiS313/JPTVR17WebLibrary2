@@ -16,7 +16,10 @@
         <h1>Список читателей</h1>
         <ul>
             <c:forEach var="reader" items="${listReaders}">
-                <li>Читатель: ${reader.name} ${reader.surname}. Еелефон: ${reader.phone}</li>
+                <li>
+                    Читатель: ${reader.name} ${reader.surname}. Tелефон: ${reader.phone}
+                    <a href="editReader?id=${reader.id}">Изменить</a>
+                </li>
             </c:forEach>
         </ul>
     </body>

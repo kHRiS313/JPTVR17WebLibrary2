@@ -4,6 +4,7 @@
     Author     : Melnikov
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -12,6 +13,15 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <h1>Возврат книги</h1>
+        <p>${info}</p>
+        <form action="doReturnBook" method="POST">
+            <select name="historyId">
+                <c:forEach var="history" items="${listHistories}">
+                    <option value="${history.id}">${history.reader.name} ${history.reader.surname} читает книгу ${history.book.name}
+                </c:forEach>
+            </select><br>
+            <input type="submit" value="Вернуть книгу">
+        </form>
     </body>
 </html>
