@@ -25,6 +25,7 @@ public class Book implements Serializable{
     private String isbn;
     private int publishedYear;
     private int quantity;
+    private int countInLibrary;
 
     public Book() {
     }
@@ -35,6 +36,7 @@ public class Book implements Serializable{
         this.isbn = isbn;
         this.publishedYear = publishedYear;
         this.quantity = quantity;
+        this.countInLibrary = quantity;
     }
 
     public Long getId() {
@@ -82,12 +84,21 @@ public class Book implements Serializable{
     }
 
     public void setQuantity(int quantity) {
+        this.setCountInLibrary(quantity - this.quantity + this.countInLibrary);
         this.quantity = quantity;
     }
 
     @Override
     public String toString() {
-        return "Book{" + "id=" + id + ", name=" + name + ", author=" + author + ", isbn=" + isbn + ", publishedYear=" + publishedYear + ", quantity=" + quantity + '}';
+        return "Book{" + "id=" + id + ", name=" + name + ", author=" + author + ", isbn=" + isbn + ", publishedYear=" + publishedYear + ", quantity=" + quantity+ ", countInLibrary=" + countInLibrary + '}';
+    }
+
+    public int getCountInLibrary() {
+        return countInLibrary;
+    }
+
+    public void setCountInLibrary(int countInLibrary) {
+        this.countInLibrary = countInLibrary;
     }
 
     

@@ -14,6 +14,7 @@
     </head>
     <body>
         <h1>Новый читатель!</h1>
+        <p>${info}</p>
         <form action="addReader" method="POST">
             Имя: <input type="text" name="name"><br>
             Фамилия: <input type="text" name="surname"><br>
@@ -21,7 +22,7 @@
             <input type="submit" value="Добавить читателя">
         </form>
         <c:if test="${reader ne null}">
-            <p>Добавлен новый пользователь: ${reader.name} ${reader.surname}</p>
+            
         </c:if>
         
     </body>

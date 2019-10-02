@@ -71,10 +71,20 @@ public class WebController extends HttpServlet {
                 String publichedYear = request.getParameter("publishedYear");
                 String isbn = request.getParameter("isbn");
                 String quantity = request.getParameter("quantity");
-                Book book = new Book( name, author, isbn, new Integer(publichedYear),Integer.parseInt(quantity));
-                //Запись данных в базу
-                bookFacade.create(book);
-                request.setAttribute("book", book);
+                Book book = null;
+                try {
+                    if(!"".equals(name) && !"".equals(author)){
+                        book = new Book( name, author, isbn, new Integer(publichedYear),Integer.parseInt(quantity));
+                        bookFacade.create(book);
+                        request.setAttribute("info", "Книга \"" + book.getName()+"\" добавлена");
+                    }else{
+                        request.setAttribute("info", "Книгу добавить не удалось (не корректные данные)"); 
+                    }
+                    
+                } catch (Exception e) {
+                   request.setAttribute("info", "Книгу добавить не удалось (не корректные данные)"); 
+                }
+                
                 request.getRequestDispatcher("/newBook.jsp").forward(request, response);
                 break;
             case "/newReader":
@@ -84,10 +94,25 @@ public class WebController extends HttpServlet {
                 name = request.getParameter("name");
                 String surname = request.getParameter("surname");
                 String phone = request.getParameter("phone");
-                Reader reader = new Reader(null, name, surname, phone);
-                //Запись данных в базу
-                readerFacade.create(reader);
-                request.setAttribute("reader", reader);
+                Reader reader = null;
+                try {
+                    if(!"".equals(name) && name != null && !"".equals(surname) && surname != null && !"".equals(phone) && phone != null){
+                        reader = new Reader(null, name, surname, phone);
+                        readerFacade.create(reader);
+                        request.setAttribute("info", "Читатель "
+                                + reader.getName()
+                                +" "
+                                +reader.getSurname()
+                                +" добавлен."
+                        ); 
+                    }else{
+                        request.setAttribute("info", 
+                            "Читателя добавить не удалось (не корректные данные");
+                    }
+                } catch (Exception e) {
+                    request.setAttribute("info", 
+                            "Читателя добавить не удалось (не корректные данные");
+                }
                 request.getRequestDispatcher("/newReader.jsp").forward(request, response);
                 break;
 
@@ -162,19 +187,23 @@ public class WebController extends HttpServlet {
             case "/doTakeBook":
                 String readerId = request.getParameter("readerId");
                 bookId = request.getParameter("bookId");
-                reader = readerFacade.find(Long.parseLong(readerId));
-                book = bookFacade.find(Long.parseLong(bookId));
-                if(book.getQuantity()>0){
-                    book.setQuantity(book.getQuantity()-1);
-                    bookFacade.edit(book);
-                    History history = new History();
-                    history.setBook(book);
-                    history.setReader(reader);
-                    history.setTakeBook(new Date());
-                    historyFacade.create(history);
-                    request.setAttribute("info", "Книга выдана");
-                }else{
-                    request.setAttribute("info", "Книги нет в наличии");
+                try {
+                    reader = readerFacade.find(Long.parseLong(readerId));
+                    book = bookFacade.find(Long.parseLong(bookId));
+                    if(book.getCountInLibrary()>0){
+                        book.setCountInLibrary(book.getCountInLibrary()-1);
+                        bookFacade.edit(book);
+                        History history = new History();
+                        history.setBook(book);
+                        history.setReader(reader);
+                        history.setTakeBook(new Date());
+                        historyFacade.create(history);
+                        request.setAttribute("info", "Книга выдана");
+                    }else{
+                        request.setAttribute("info", "Книги нет в наличии");
+                    }
+                } catch (Exception e) {
+                    request.setAttribute("info", "Не корректные данные");
                 }
                 request.getRequestDispatcher("/takeBook")
                         .forward(request, response);
@@ -187,12 +216,22 @@ public class WebController extends HttpServlet {
                 break;
             case "/doReturnBook":
                 String historyId = request.getParameter("historyId");
-                History history = historyFacade.find(Long.parseLong(historyId));
-                history.setReturnBook(new Date());
-                book = history.getBook();
-                book.setQuantity(book.getQuantity()+1);
-                bookFacade.edit(book);
-                historyFacade.edit(history);
+                try {
+                    History history = historyFacade.find(Long.parseLong(historyId));
+                    history.setReturnBook(new Date());
+                    book = history.getBook();
+                    if(book.getQuantity() > book.getCountInLibrary()){
+                        book.setCountInLibrary(book.getCountInLibrary()+1);
+                        bookFacade.edit(book);
+                        historyFacade.edit(history);
+                        request.setAttribute("info", "Книга \""+book.getName()+"\"возвращена.");
+                    }else{
+                        request.setAttribute("info", "Книга \""+book.getName()+"\" уже была возвращена раньше");
+                    }
+                } catch (Exception e) {
+                     request.setAttribute("info", "Не корректные данные");
+
+                }
                 request.getRequestDispatcher("/returnBook")
                         .forward(request, response);
                 break;
