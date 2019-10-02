@@ -14,6 +14,7 @@
     </head>
     <body>
         <h1>Выдать книгу</h1>
+        <a href="index.jsp">Главная страница</a>
         <p>${info}</p>
         <form action="doTakeBook" method="POST">
             Список читателей:
@@ -24,7 +25,7 @@
             </select>
             <br>
             Список книг: 
-             <select name="bookId">
+            <select name="bookId">
                 <c:forEach var="book" items="${listBooks}">
                     <option value="${book.id}">${book.name} ${book.author}</option>
                 </c:forEach>

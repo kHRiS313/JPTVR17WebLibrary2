@@ -19,5 +19,6 @@
         <a href="listReaders">Список читателей</a><br>
         <a href="takeBook">Выдать книгу читателю</a><br>
         <a href="returnBook">Вернуть книгу</a><br>
+        <a href="takeOnBooks">Список выданных книг</a><br>
     </body>
 </html>

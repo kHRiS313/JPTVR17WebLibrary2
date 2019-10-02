@@ -13,6 +13,7 @@
     </head>
     <body>
         <h1>Редактирование атрибутов книги!</h1>
+        <a href="index.jsp">Главная страница</a>
         <p>${info}</p>
         <form action="changeBook" method="POST">
             <input type="hidden" name="id" value="${book.id}">

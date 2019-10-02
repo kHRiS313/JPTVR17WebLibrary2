@@ -14,6 +14,7 @@
     </head>
     <body>
         <h1>Новый читатель!</h1>
+        <a href="index.jsp">Главная страница</a>
         <p>${info}</p>
         <form action="addReader" method="POST">
             Имя: <input type="text" name="name"><br>

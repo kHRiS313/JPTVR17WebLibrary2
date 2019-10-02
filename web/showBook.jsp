@@ -13,6 +13,7 @@
     </head>
     <body>
         <h1>Книга</h1>
+        <a href="index.jsp">Главная страница</a><br>
         Название книги: ${book.name}<br>
         Название книги: ${book.author}<br>
         Год издания книги: ${book.publishedYear}<br>

@@ -31,8 +31,10 @@ public class BookFacade extends AbstractFacade<Book> {
     }
 
     public List<Book> findTakeBook() {
-        return em.createQuery("SELECT b FROM Book b WHERE b.quantity > 0")
+        return em.createQuery("SELECT b FROM Book b WHERE b.countInLibrary > 0")
                 .getResultList();
     }
+
+   
     
 }

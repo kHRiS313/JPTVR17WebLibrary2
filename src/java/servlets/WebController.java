@@ -41,6 +41,7 @@ import session.ReaderFacade;
     "/doTakeBook",
     "/returnBook",
     "/doReturnBook",
+    "/takeOnBooks",
     
 })
 public class WebController extends HttpServlet {
@@ -235,7 +236,12 @@ public class WebController extends HttpServlet {
                 request.getRequestDispatcher("/returnBook")
                         .forward(request, response);
                 break;
-            
+            case "/takeOnBooks":
+                listHistories = historyFacade.findNotReturnedBook();
+                request.setAttribute("takeOnBooks", listHistories);
+                request.getRequestDispatcher("/takeOnBooks.jsp")
+                        .forward(request, response);
+                break;
         }
     }
 

@@ -13,6 +13,7 @@
     </head>
     <body>
         <h1>Добавление новой книги!</h1>
+        <a href="index.jsp">Главная страница</a>
         <p>${info}</p>
         <form action="addBook" method="POST">
             Название книги: <input type="text" name="name"><br>

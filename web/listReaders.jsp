@@ -14,6 +14,7 @@
     </head>
     <body>
         <h1>Список читателей</h1>
+        <a href="index.jsp">Главная страница</a>
         <ul>
             <c:forEach var="reader" items="${listReaders}">
                 <li>

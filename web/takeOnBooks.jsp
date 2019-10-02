@@ -13,12 +13,12 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Список книг библиотеки</h1>
+        <h1>Список выданных книг библиотеки</h1>
         <a href="index.jsp">Главная страница</a>
         <ul>
-            <c:forEach var="book" items="${listBooks}">
+            <c:forEach var="history" items="${takeOnBooks}">
                 <li>
-                    Название: ${book.name} <a href="showBook?id=${book.id}">Показать</a>
+                   Книгу "${history.book.name}" читает ${history.reader.name} ${history.reader.surname} <a href="showBook?id=${history.book.id}">Показать</a>
                 </li>
             </c:forEach>
         </ul>

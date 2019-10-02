@@ -14,6 +14,7 @@
     </head>
     <body>
         <h1>Возврат книги</h1>
+        <a href="index.jsp">Главная страница</a>
         <p>${info}</p>
         <form action="doReturnBook" method="POST">
             <select name="historyId">

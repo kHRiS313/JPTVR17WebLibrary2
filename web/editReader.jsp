@@ -14,6 +14,7 @@
     </head>
     <body>
         <h1>Изменение читателя</h1>
+        <a href="index.jsp">Главная страница</a>
         <p>${info}</p>
         <form action="changeReader" method="POST">
             <input type="hidden" name="id" value="${reader.id}">
