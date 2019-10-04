@@ -70,13 +70,12 @@ public class WebController extends HttpServlet {
             request.getRequestDispatcher("/index.jsp").forward(request, response);
             return;   
         }
-        User user = (User) session.getAttribute("user");
-        if(user == null){
+        if(null == session.getAttribute("user")){
             request.setAttribute("info", "У вас нет прав доступа, войдите в систему");
             request.getRequestDispatcher("/index.jsp").forward(request, response);
             return; 
         }
-        
+        User user = (User) session.getAttribute("user");
         request.setAttribute("info", "Вы вошли как "+user.getLogin());
         switch (path) {
             case "/newBook":

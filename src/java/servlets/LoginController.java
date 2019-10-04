@@ -63,7 +63,7 @@ public class LoginController extends HttpServlet {
                         .forward(request, response);
                 }
                 HttpSession session = request.getSession(true);
-                session.setAttribute("user", "user");
+                session.setAttribute("user", user);
                 request.setAttribute("info", "Вы вошли в систему как "+login);
                 request.getRequestDispatcher("/index.jsp")
                         .forward(request, response);
