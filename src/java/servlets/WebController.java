@@ -8,6 +8,7 @@ package servlets;
 import entity.Book;
 import entity.History;
 import entity.Reader;
+import entity.User;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
@@ -17,6 +18,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import session.BookFacade;
 import session.HistoryFacade;
 import session.ReaderFacade;
@@ -62,6 +64,20 @@ public class WebController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
         String path = request.getServletPath();
+        HttpSession session = request.getSession(false);
+        if (null == session){
+            request.setAttribute("info", "У вас нет прав доступа, войдите в систему");
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
+            return;   
+        }
+        User user = (User) session.getAttribute("user");
+        if(user == null){
+            request.setAttribute("info", "У вас нет прав доступа, войдите в систему");
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
+            return; 
+        }
+        
+        request.setAttribute("info", "Вы вошли как "+user.getLogin());
         switch (path) {
             case "/newBook":
                 request.getRequestDispatcher("/newBook.jsp").forward(request, response);
