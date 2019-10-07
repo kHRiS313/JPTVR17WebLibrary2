@@ -30,8 +30,7 @@ import session.ReaderFacade;
 @WebServlet(name = "WebController", urlPatterns = {
     "/newBook",
     "/addBook",
-    "/newReader",
-    "/addReader",
+    
     "/editReader",
     "/changeReader",
     "/listBooks",
@@ -76,6 +75,7 @@ public class WebController extends HttpServlet {
             return; 
         }
         User user = (User) session.getAttribute("user");
+        Reader reader = null;
         request.setAttribute("info", "Вы вошли как "+user.getLogin());
         switch (path) {
             case "/newBook":
@@ -103,35 +103,7 @@ public class WebController extends HttpServlet {
                 
                 request.getRequestDispatcher("/newBook.jsp").forward(request, response);
                 break;
-            case "/newReader":
-                request.getRequestDispatcher("/newReader.jsp").forward(request, response);
-                break;
-            case "/addReader":
-                name = request.getParameter("name");
-                String surname = request.getParameter("surname");
-                String phone = request.getParameter("phone");
-                Reader reader = null;
-                try {
-                    if(!"".equals(name) && name != null && !"".equals(surname) && surname != null && !"".equals(phone) && phone != null){
-                        reader = new Reader(null, name, surname, phone);
-                        readerFacade.create(reader);
-                        request.setAttribute("info", "Читатель "
-                                + reader.getName()
-                                +" "
-                                +reader.getSurname()
-                                +" добавлен."
-                        ); 
-                    }else{
-                        request.setAttribute("info", 
-                            "Читателя добавить не удалось (не корректные данные");
-                    }
-                } catch (Exception e) {
-                    request.setAttribute("info", 
-                            "Читателя добавить не удалось (не корректные данные");
-                }
-                request.getRequestDispatcher("/newReader.jsp").forward(request, response);
-                break;
-
+            
             case "/listBooks":
                 List<Book> listBooks = bookFacade.findAll();
                 request.setAttribute("listBooks", listBooks);
@@ -182,8 +154,8 @@ public class WebController extends HttpServlet {
             case "/changeReader":
                 id = request.getParameter("id");
                 name = request.getParameter("name");
-                surname = request.getParameter("surname");
-                phone = request.getParameter("phone");
+                String surname = request.getParameter("surname");
+                String phone = request.getParameter("phone");
                 reader = readerFacade.find(Long.parseLong(id));
                 reader.setName(name);
                 reader.setSurname(surname);

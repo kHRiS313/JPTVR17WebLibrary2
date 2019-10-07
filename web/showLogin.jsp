@@ -13,6 +13,7 @@
     </head>
     <body>
         <h1>Аутентификация</h1>
+        <p>${info}</p>
         <form action="login" method="POST">
             Логин: <input type="text" name="login">
             <br>

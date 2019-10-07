@@ -20,6 +20,9 @@
             Имя: <input type="text" name="name"><br>
             Фамилия: <input type="text" name="surname"><br>
             Телефон: <input type="text" name="phone"><br>
+            Login: <input type="text" name="login"><br>
+            Пароль: <input type="password" name="password1"><br>
+            Повторить пароль: <input type="password" name="password2"><br>
             <input type="submit" value="Добавить читателя">
         </form>
         <c:if test="${reader ne null}">

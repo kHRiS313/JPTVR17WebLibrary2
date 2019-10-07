@@ -30,9 +30,14 @@ public class UserFacade extends AbstractFacade<User> {
     }
 
     public User findByLogin(String login) {
-        return (User) em.createQuery("SELECT u FROM User u WHERE u.login=:login")
+        try {
+            return (User) em.createQuery("SELECT u FROM User u WHERE u.login=:login")
                 .setParameter("login", login)
                 .getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
+        
     }
     
 }

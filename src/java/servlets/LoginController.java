@@ -5,9 +5,9 @@
  */
 package servlets;
 
+import entity.Reader;
 import entity.User;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import session.ReaderFacade;
 import session.UserFacade;
 
 /**
@@ -24,11 +25,14 @@ import session.UserFacade;
 @WebServlet(name = "LoginController", urlPatterns = {
     "/showLogin",
     "/login",
+    "/newReader",
+    "/addReader",
     
 
 })
 public class LoginController extends HttpServlet {
    @EJB UserFacade userFacade;
+   @EJB ReaderFacade readerFacade;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -68,6 +72,61 @@ public class LoginController extends HttpServlet {
                 request.getRequestDispatcher("/index.jsp")
                         .forward(request, response);
                 break;
+            case "/newReader":
+                request.getRequestDispatcher("/newReader.jsp").forward(request, response);
+                break;
+            case "/addReader":
+                String name = request.getParameter("name");
+                String surname = request.getParameter("surname");
+                String phone = request.getParameter("phone");
+                login = request.getParameter("login");
+                String password1 = request.getParameter("password1");
+                String password2 = request.getParameter("password2");
+                if(!(password1 != null && password1.equals(password2))){
+                    request.setAttribute("info", 
+                            "Читателя добавить не удалось (не корректные данные");
+                    request.getRequestDispatcher("/newReader.jsp").forward(request, response);
+                    break;
+                }
+                Reader reader = null;
+                try {
+                    if(!"".equals(name) && name != null 
+                            && !"".equals(surname) && surname != null 
+                            && !"".equals(phone) && phone != null
+                            && !"".equals(login) && login != null
+                            && !"".equals(password1) && password1 != null
+                            ){
+                        reader = new Reader(null, name, surname, phone);
+                        readerFacade.create(reader);
+                        user = new User(login, password1, reader);
+                        try {
+                            userFacade.create(user);
+                        } catch (Exception e) {
+                           readerFacade.remove(reader);
+                           throw new Exception(e);
+                        }
+                        
+                        request.setAttribute("info", "Читатель "
+                                + reader.getName()
+                                +" "
+                                +reader.getSurname()
+                                +" добавлен."
+                        ); 
+                    }else{
+                        request.setAttribute("info", 
+                            "Читателя добавить не удалось (не корректные данные");
+                        request.getRequestDispatcher("/newReader.jsp").forward(request, response);
+                        break;
+                    }
+                } catch (Exception e) {
+                    request.setAttribute("info", 
+                            "Читателя добавить не удалось (не корректные данные");
+                    request.getRequestDispatcher("/newReader.jsp").forward(request, response);
+                    break;
+                }
+                request.getRequestDispatcher("/newReader.jsp").forward(request, response);
+                break;
+
         }
 
     }
