@@ -14,6 +14,7 @@
     <body>
         <h1>Сетевая библиотека</h1>
         <p>${info}</p>
+        <p>Вошедший пользователь: ${user.login}</p>
         <a href="showLogin">Войти</a><br>
         <a href="logout">Выйти</a><br>
         <a href="newBook">Добавить новую книгу</a><br>

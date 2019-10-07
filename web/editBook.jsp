@@ -14,7 +14,7 @@
     <body>
         <h1>Редактирование атрибутов книги!</h1>
         <a href="index.jsp">Главная страница</a>
-        <p>${info}</p>
+        <p>${info}</p><p>Вошедший пользователь: ${user.login}</p>
         <form action="changeBook" method="POST">
             <input type="hidden" name="id" value="${book.id}">
             Название книги: <input type="text" name="name" value="${book.name}"><br>

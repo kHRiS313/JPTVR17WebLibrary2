@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import session.ReaderFacade;
 import session.UserFacade;
+import util.EncriptPass;
 
 /**
  *
@@ -25,6 +26,7 @@ import session.UserFacade;
 @WebServlet(name = "LoginController", urlPatterns = {
     "/showLogin",
     "/login",
+    "/logout",
     "/newReader",
     "/addReader",
     
@@ -46,6 +48,7 @@ public class LoginController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
+        EncriptPass ep = new EncriptPass();
         String path = request.getServletPath();
         switch (path) {
             case "/showLogin":
@@ -61,6 +64,7 @@ public class LoginController extends HttpServlet {
                     request.getRequestDispatcher("/showLogin.jsp")
                         .forward(request, response);
                 }
+                password = ep.setEncriptPass(password,user.getSalts());
                 if(!password.equals(user.getPassword())){
                     request.setAttribute("info", "Неправильный логин или пароль");
                     request.getRequestDispatcher("/showLogin.jsp")
@@ -71,6 +75,14 @@ public class LoginController extends HttpServlet {
                 request.setAttribute("info", "Вы вошли в систему как "+login);
                 request.getRequestDispatcher("/index.jsp")
                         .forward(request, response);
+                break;
+            case "/logout":
+                session = request.getSession(false);
+                if(null != session){
+                    session.invalidate();
+                }
+                request.setAttribute("info", "Вы вышли из системы");
+                request.getRequestDispatcher("/index.jsp").forward(request, response);
                 break;
             case "/newReader":
                 request.getRequestDispatcher("/newReader.jsp").forward(request, response);
@@ -98,14 +110,15 @@ public class LoginController extends HttpServlet {
                             ){
                         reader = new Reader(null, name, surname, phone);
                         readerFacade.create(reader);
-                        user = new User(login, password1, reader);
+                        String salts = ep.createSalts();
+                        password = ep.setEncriptPass(password1,salts);
+                        user = new User(login, salts, password, reader);
                         try {
                             userFacade.create(user);
                         } catch (Exception e) {
                            readerFacade.remove(reader);
                            throw new Exception(e);
                         }
-                        
                         request.setAttribute("info", "Читатель "
                                 + reader.getName()
                                 +" "

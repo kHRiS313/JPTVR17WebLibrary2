@@ -76,7 +76,7 @@ public class WebController extends HttpServlet {
         }
         User user = (User) session.getAttribute("user");
         Reader reader = null;
-        request.setAttribute("info", "Вы вошли как "+user.getLogin());
+        request.setAttribute("user", user);
         switch (path) {
             case "/newBook":
                 request.getRequestDispatcher("/newBook.jsp").forward(request, response);

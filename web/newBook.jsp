@@ -15,6 +15,7 @@
         <h1>Добавление новой книги!</h1>
         <a href="index.jsp">Главная страница</a>
         <p>${info}</p>
+        <p>Вошедший пользователь: ${user.login}</p>
         <form action="addBook" method="POST">
             Название книги: <input type="text" name="name"><br>
             Автор книги: <input type="text" name="author"><br>

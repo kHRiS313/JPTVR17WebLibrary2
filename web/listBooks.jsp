@@ -14,6 +14,8 @@
     </head>
     <body>
         <h1>Список книг библиотеки</h1>
+        <p>${info}</p>
+        <p>Вошедший пользователь: ${user.login}</p>
         <a href="index.jsp">Главная страница</a>
         <ul>
             <c:forEach var="book" items="${listBooks}">

@@ -16,6 +16,7 @@
         <h1>Выдать книгу</h1>
         <a href="index.jsp">Главная страница</a>
         <p>${info}</p>
+        <p>Вошедший пользователь: ${user.login}</p>
         <form action="doTakeBook" method="POST">
             Список читателей:
             <select name="readerId">

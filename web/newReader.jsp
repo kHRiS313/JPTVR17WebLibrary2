@@ -16,6 +16,7 @@
         <h1>Новый читатель!</h1>
         <a href="index.jsp">Главная страница</a>
         <p>${info}</p>
+        <p>Вошедший пользователь: ${user.login}</p>
         <form action="addReader" method="POST">
             Имя: <input type="text" name="name"><br>
             Фамилия: <input type="text" name="surname"><br>

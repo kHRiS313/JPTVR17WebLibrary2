@@ -16,6 +16,7 @@
         <h1>Возврат книги</h1>
         <a href="index.jsp">Главная страница</a>
         <p>${info}</p>
+        <p>Вошедший пользователь: ${user.login}</p>
         <form action="doReturnBook" method="POST">
             <select name="historyId">
                 <c:forEach var="history" items="${listHistories}">

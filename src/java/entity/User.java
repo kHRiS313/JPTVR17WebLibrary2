@@ -23,6 +23,7 @@ public class User {
     private Long id;
     @Column(unique = true)
     private String login;
+    private String salts;
     private String password;
     @OneToOne
     private Reader reader;
@@ -30,11 +31,14 @@ public class User {
     public User() {
     }
 
-    public User(String login, String password, Reader reader) {
+    public User(String login, String salts, String password, Reader reader) {
         this.login = login;
+        this.salts = salts;
         this.password = password;
         this.reader = reader;
     }
+
+    
 
     public Long getId() {
         return id;
@@ -71,6 +75,14 @@ public class User {
     @Override
     public String toString() {
         return "User{" + "id=" + id + ", login=" + login + ", password=" + password + ", reader=" + reader.getSurname() + '}';
+    }
+
+    public String getSalts() {
+        return salts;
+    }
+
+    public void setSalts(String salts) {
+        this.salts = salts;
     }
     
     
