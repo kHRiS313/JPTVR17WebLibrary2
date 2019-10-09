@@ -18,7 +18,7 @@
         <a href="showLogin">Войти</a><br>
         <a href="logout">Выйти</a><br>
         <a href="newBook">Добавить новую книгу</a><br>
-        <a href="newReader">Добавить нового читателя</a><br>
+        <a href="newReader">Регистрация</a><br>
         <a href="listBooks">Список книг</a><br>
         <a href="listReaders">Список читателей</a><br>
         <a href="takeBook">Выдать книгу читателю</a><br>

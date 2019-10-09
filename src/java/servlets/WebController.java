@@ -30,10 +30,9 @@ import session.ReaderFacade;
 @WebServlet(name = "WebController", urlPatterns = {
     "/newBook",
     "/addBook",
-    
     "/editReader",
     "/changeReader",
-    "/listBooks",
+    
     "/showBook",
     "/editBook",
     "/changeBook",
@@ -104,11 +103,7 @@ public class WebController extends HttpServlet {
                 request.getRequestDispatcher("/newBook.jsp").forward(request, response);
                 break;
             
-            case "/listBooks":
-                List<Book> listBooks = bookFacade.findAll();
-                request.setAttribute("listBooks", listBooks);
-                request.getRequestDispatcher("/listBooks.jsp").forward(request, response);
-                break;
+            
             case "/showBook":
                 String bookId = request.getParameter("id");
                 book = bookFacade.find(Long.parseLong(bookId));
@@ -166,7 +161,7 @@ public class WebController extends HttpServlet {
                 request.getRequestDispatcher("/listReaders").forward(request, response);
                 break;
             case "/takeBook":
-                listBooks = bookFacade.findTakeBook();
+                List<Book> listBooks = bookFacade.findTakeBook();
                 listReaders = readerFacade.findAll();
                 request.setAttribute("listBooks", listBooks);
                 request.setAttribute("listReaders", listReaders);

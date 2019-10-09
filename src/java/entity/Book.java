@@ -6,6 +6,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -99,6 +100,55 @@ public class Book implements Serializable{
 
     public void setCountInLibrary(int countInLibrary) {
         this.countInLibrary = countInLibrary;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 17 * hash + Objects.hashCode(this.id);
+        hash = 17 * hash + Objects.hashCode(this.name);
+        hash = 17 * hash + Objects.hashCode(this.author);
+        hash = 17 * hash + Objects.hashCode(this.isbn);
+        hash = 17 * hash + this.publishedYear;
+        hash = 17 * hash + this.quantity;
+        hash = 17 * hash + this.countInLibrary;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Book other = (Book) obj;
+        if (this.publishedYear != other.publishedYear) {
+            return false;
+        }
+        if (this.quantity != other.quantity) {
+            return false;
+        }
+        if (this.countInLibrary != other.countInLibrary) {
+            return false;
+        }
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        if (!Objects.equals(this.author, other.author)) {
+            return false;
+        }
+        if (!Objects.equals(this.isbn, other.isbn)) {
+            return false;
+        }
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
     }
 
     
