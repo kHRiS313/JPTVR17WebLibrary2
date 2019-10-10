@@ -16,6 +16,7 @@ import java.util.logging.Level;
  * @author Melnikov
  */
 public class EncriptPass {
+    
     public String setEncriptPass(String password, String salts){
         password = salts + password;
         MessageDigest m;
@@ -30,6 +31,7 @@ public class EncriptPass {
             return null;
         }
     }
+    
     public String createSalts(){
         Date date = new Date();
         String s = Long.toString(date.getTime());

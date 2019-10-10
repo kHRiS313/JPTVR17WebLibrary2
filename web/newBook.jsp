@@ -22,6 +22,7 @@
             Год издания: <input type="text" name="publishedYear"><br>
             ISBN: <input type="text" name="isbn"><br>
             Количество экземпляров: <input type="text" name="quantity"><br>
+            Стоимость: <input type="text" name="price"><br>
             <input type="submit" value="Добавить книгу">
         </form>
     </body>

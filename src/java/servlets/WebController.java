@@ -28,20 +28,11 @@ import session.ReaderFacade;
  * @author Melnikov
  */
 @WebServlet(name = "WebController", urlPatterns = {
-    "/newBook",
-    "/addBook",
-    "/editReader",
-    "/changeReader",
-    
-    "/showBook",
-    "/editBook",
-    "/changeBook",
-    "/listReaders",
-    "/takeBook",
+
     "/doTakeBook",
-    "/returnBook",
-    "/doReturnBook",
-    "/takeOnBooks",
+    "/showBook",
+  
+  
     
 })
 public class WebController extends HttpServlet {
@@ -77,152 +68,37 @@ public class WebController extends HttpServlet {
         Reader reader = null;
         request.setAttribute("user", user);
         switch (path) {
-            case "/newBook":
-                request.getRequestDispatcher("/newBook.jsp").forward(request, response);
-                break;
-            case "/addBook":
-                String name = request.getParameter("name");
-                String author = request.getParameter("author");
-                String publichedYear = request.getParameter("publishedYear");
-                String isbn = request.getParameter("isbn");
-                String quantity = request.getParameter("quantity");
-                Book book = null;
-                try {
-                    if(!"".equals(name) && !"".equals(author)){
-                        book = new Book( name, author, isbn, new Integer(publichedYear),Integer.parseInt(quantity));
-                        bookFacade.create(book);
-                        request.setAttribute("info", "Книга \"" + book.getName()+"\" добавлена");
-                    }else{
-                        request.setAttribute("info", "Книгу добавить не удалось (не корректные данные)"); 
-                    }
-                    
-                } catch (Exception e) {
-                   request.setAttribute("info", "Книгу добавить не удалось (не корректные данные)"); 
-                }
-                
-                request.getRequestDispatcher("/newBook.jsp").forward(request, response);
-                break;
-            
-            
-            case "/showBook":
-                String bookId = request.getParameter("id");
-                book = bookFacade.find(Long.parseLong(bookId));
-                request.setAttribute("book", book);
-                request.getRequestDispatcher("/showBook.jsp").forward(request, response);
-                break;
-            case "/editBook":
-                bookId = request.getParameter("id");
-                book = bookFacade.find(Long.parseLong(bookId));
-                request.setAttribute("book", book);
-                request.getRequestDispatcher("/editBook.jsp").forward(request, response);
-                break;
-            case "/changeBook":
-                String id = request.getParameter("id");
-                name = request.getParameter("name");
-                author = request.getParameter("author");
-                publichedYear = request.getParameter("publishedYear");
-                isbn = request.getParameter("isbn");
-                quantity = request.getParameter("quantity");
-                book = bookFacade.find(Long.parseLong(id));
-                book.setName(name);
-                book.setAuthor(author);
-                book.setPublishedYear(Integer.parseInt(publichedYear));
-                book.setIsbn(isbn);
-                book.setQuantity(Integer.parseInt(quantity));
-                bookFacade.edit(book);
-                request.setAttribute("book", book);
-                request.setAttribute("info", "Книга изменена!");
-                request.getRequestDispatcher("/editBook.jsp").forward(request, response);
-                break;
-            case "/listReaders":
-                List<Reader> listReaders = readerFacade.findAll();
-                request.setAttribute("listReaders", listReaders);
-                request.getRequestDispatcher("/listReaders.jsp").forward(request, response);
-                break;
-            case "/editReader":
-                id = request.getParameter("id");
-                reader = readerFacade.find(Long.parseLong(id));
-                request.setAttribute("reader", reader);
-                request.getRequestDispatcher("/editReader.jsp")
-                        .forward(request, response);
-                break;
-            case "/changeReader":
-                id = request.getParameter("id");
-                name = request.getParameter("name");
-                String surname = request.getParameter("surname");
-                String phone = request.getParameter("phone");
-                reader = readerFacade.find(Long.parseLong(id));
-                reader.setName(name);
-                reader.setSurname(surname);
-                reader.setPhone(phone);
-                //Запись данных в базу
-                readerFacade.edit(reader);
-                request.setAttribute("reader", reader);
-                request.getRequestDispatcher("/listReaders").forward(request, response);
-                break;
-            case "/takeBook":
-                List<Book> listBooks = bookFacade.findTakeBook();
-                listReaders = readerFacade.findAll();
-                request.setAttribute("listBooks", listBooks);
-                request.setAttribute("listReaders", listReaders);
-                request.getRequestDispatcher("/takeBook.jsp").forward(request, response);
-                break;
             case "/doTakeBook":
-                String readerId = request.getParameter("readerId");
-                bookId = request.getParameter("bookId");
+                String bookId = request.getParameter("bookId");
                 try {
-                    reader = readerFacade.find(Long.parseLong(readerId));
-                    book = bookFacade.find(Long.parseLong(bookId));
+                    Book book = bookFacade.find(Long.parseLong(bookId));
                     if(book.getCountInLibrary()>0){
-                        book.setCountInLibrary(book.getCountInLibrary()-1);
-                        bookFacade.edit(book);
-                        History history = new History();
-                        history.setBook(book);
-                        history.setReader(reader);
-                        history.setTakeBook(new Date());
-                        historyFacade.create(history);
-                        request.setAttribute("info", "Книга выдана");
+                        if(user.getReader().getMoney() > user.getReader().getMoney()-book.getPrice()){
+                            book.setCountInLibrary(book.getCountInLibrary()-1);
+                            bookFacade.edit(book);
+                            History history = new History();
+                            history.setBook(book);
+                            history.setReader(user.getReader());
+                            history.setTakeBook(new Date());
+                            historyFacade.create(history);
+                            request.setAttribute("info", "Книга куплена");
+                        }else{
+                            request.setAttribute("info", "Не хватает денег!");
+                        }
                     }else{
                         request.setAttribute("info", "Книги нет в наличии");
                     }
                 } catch (Exception e) {
                     request.setAttribute("info", "Не корректные данные");
                 }
-                request.getRequestDispatcher("/takeBook")
+                request.getRequestDispatcher("/listBooks")
                         .forward(request, response);
                 break;
-            case "/returnBook":
-                List<History> listHistories = historyFacade.findNotReturnedBook();
-                request.setAttribute("listHistories", listHistories);
-                request.getRequestDispatcher("/returnBook.jsp")
-                        .forward(request, response);
-                break;
-            case "/doReturnBook":
-                String historyId = request.getParameter("historyId");
-                try {
-                    History history = historyFacade.find(Long.parseLong(historyId));
-                    history.setReturnBook(new Date());
-                    book = history.getBook();
-                    if(book.getQuantity() > book.getCountInLibrary()){
-                        book.setCountInLibrary(book.getCountInLibrary()+1);
-                        bookFacade.edit(book);
-                        historyFacade.edit(history);
-                        request.setAttribute("info", "Книга \""+book.getName()+"\"возвращена.");
-                    }else{
-                        request.setAttribute("info", "Книга \""+book.getName()+"\" уже была возвращена раньше");
-                    }
-                } catch (Exception e) {
-                     request.setAttribute("info", "Не корректные данные");
-
-                }
-                request.getRequestDispatcher("/returnBook")
-                        .forward(request, response);
-                break;
-            case "/takeOnBooks":
-                listHistories = historyFacade.findNotReturnedBook();
-                request.setAttribute("takeOnBooks", listHistories);
-                request.getRequestDispatcher("/takeOnBooks.jsp")
-                        .forward(request, response);
+            case "/showBook":
+                bookId = request.getParameter("id");
+                Book book = bookFacade.find(Long.parseLong(bookId));
+                request.setAttribute("book", book);
+                request.getRequestDispatcher("/showBook.jsp").forward(request, response);
                 break;
         }
     }

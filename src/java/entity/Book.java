@@ -27,17 +27,20 @@ public class Book implements Serializable{
     private int publishedYear;
     private int quantity;
     private int countInLibrary;
+    private int price;
 
     public Book() {
     }
 
-    public Book(String name, String author, String isbn, int publishedYear, int quantity) {
+    public Book(String name, String author, String isbn, int publishedYear, int quantity, int price) {
         this.name = name;
         this.author = author;
         this.isbn = isbn;
         this.publishedYear = publishedYear;
         this.quantity = quantity;
         this.countInLibrary = quantity;
+        this.price = price;
+        
     }
 
     public Long getId() {
@@ -91,7 +94,7 @@ public class Book implements Serializable{
 
     @Override
     public String toString() {
-        return "Book{" + "id=" + id + ", name=" + name + ", author=" + author + ", isbn=" + isbn + ", publishedYear=" + publishedYear + ", quantity=" + quantity+ ", countInLibrary=" + countInLibrary + '}';
+        return "Book{" + "id=" + id + ", name=" + name + ", author=" + author + ", isbn=" + isbn + ", publishedYear=" + publishedYear + ", quantity=" + quantity+ ", countInLibrary=" + countInLibrary + ", price=" + price + '}';
     }
 
     public int getCountInLibrary() {
@@ -149,6 +152,14 @@ public class Book implements Serializable{
             return false;
         }
         return true;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
     }
 
     

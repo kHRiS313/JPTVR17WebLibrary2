@@ -96,6 +96,7 @@ public class LoginController extends HttpServlet {
                 String name = request.getParameter("name");
                 String surname = request.getParameter("surname");
                 String phone = request.getParameter("phone");
+                String money = request.getParameter("money");
                 login = request.getParameter("login");
                 String password1 = request.getParameter("password1");
                 String password2 = request.getParameter("password2");
@@ -110,10 +111,12 @@ public class LoginController extends HttpServlet {
                     if(!"".equals(name) && name != null 
                             && !"".equals(surname) && surname != null 
                             && !"".equals(phone) && phone != null
+                            && !"".equals(money) && money != null
                             && !"".equals(login) && login != null
                             && !"".equals(password1) && password1 != null
+                            
                             ){
-                        reader = new Reader(null, name, surname, phone);
+                        reader = new Reader(null, name, surname, phone, Integer.parseInt(money));
                         readerFacade.create(reader);
                         String salts = ep.createSalts();
                         password = ep.setEncriptPass(password1,salts);
@@ -138,7 +141,7 @@ public class LoginController extends HttpServlet {
                     }
                 } catch (Exception e) {
                     request.setAttribute("info", 
-                            "Читателя добавить не удалось (не корректные данные");
+                            "Читателя добавить не удалось (не корректные данные)");
                     request.getRequestDispatcher("/newReader.jsp").forward(request, response);
                     break;
                 }

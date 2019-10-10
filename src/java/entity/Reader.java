@@ -24,15 +24,17 @@ public class Reader implements Serializable{
     private String name;
     private String surname;
     private String phone;
+    private int money;
 
     public Reader() {
     }
 
-    public Reader(Long id, String name, String surname, String phone) {
+    public Reader(Long id, String name, String surname, String phone, int money) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.phone = phone;
+        this.money = money;
     }
 
     public String getPhone() {
@@ -110,7 +112,16 @@ public class Reader implements Serializable{
                 + ", name=" + name
                 + ", surname=" + surname 
                 + ", phone=" + phone 
+                + ", money=" + money
                 + '}';
+    }
+
+    public int getMoney() {
+        return money;
+    }
+
+    public void setMoney(int money) {
+        this.money = money;
     }
     
     
