@@ -5,9 +5,11 @@
  */
 package servlets;
 
+import entity.Book;
 import entity.Reader;
 import entity.User;
 import java.io.IOException;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,6 +17,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import session.BookFacade;
 import session.ReaderFacade;
 import session.UserFacade;
 import util.EncriptPass;
@@ -29,12 +32,14 @@ import util.EncriptPass;
     "/logout",
     "/newReader",
     "/addReader",
+    "/listBooks",
     
 
 })
 public class LoginController extends HttpServlet {
    @EJB UserFacade userFacade;
    @EJB ReaderFacade readerFacade;
+   @EJB BookFacade bookFacade;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -139,7 +144,11 @@ public class LoginController extends HttpServlet {
                 }
                 request.getRequestDispatcher("/newReader.jsp").forward(request, response);
                 break;
-
+            case "/listBooks":
+                List<Book> listBooks = bookFacade.findAll();
+                request.setAttribute("listBooks", listBooks);
+                request.getRequestDispatcher("/listBooks.jsp").forward(request, response);
+                break;
         }
 
     }

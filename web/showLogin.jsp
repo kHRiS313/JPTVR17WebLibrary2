@@ -21,5 +21,6 @@
             <br>
             <input type="submit" value="Войти">
         </form>
+        Нет учетной записи? <a href="newReader">Зарегистрироваться</a><br>
     </body>
 </html>
