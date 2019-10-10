@@ -11,7 +11,6 @@ import entity.Reader;
 import entity.User;
 import java.io.IOException;
 import java.util.Date;
-import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
