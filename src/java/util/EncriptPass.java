@@ -21,7 +21,7 @@ public class EncriptPass {
         password = salts + password;
         MessageDigest m;
         try {
-            m = MessageDigest.getInstance("MD5");
+            m = MessageDigest.getInstance("SHA-256");
             m.update(password.getBytes(),0,password.length());
             return new BigInteger(1,m.digest()).toString(16);
         } catch (NoSuchAlgorithmException ex) {
