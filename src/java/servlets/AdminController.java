@@ -10,7 +10,7 @@ import entity.History;
 import entity.Reader;
 import entity.User;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -36,6 +36,8 @@ import session.ReaderFacade;
     "/changeBook",
     "/listReaders",
     "/takeOnBooks",
+    "/listAllBooks",
+    
 })
 public class AdminController extends HttpServlet {
     @EJB private BookFacade bookFacade;
@@ -110,17 +112,27 @@ public class AdminController extends HttpServlet {
                 author = request.getParameter("author");
                 publichedYear = request.getParameter("publishedYear");
                 isbn = request.getParameter("isbn");
-                quantity = request.getParameter("quantity");
+                String active = request.getParameter("active");
                 book = bookFacade.find(Long.parseLong(id));
                 book.setName(name);
                 book.setAuthor(author);
                 book.setPublishedYear(Integer.parseInt(publichedYear));
                 book.setIsbn(isbn);
-                book.setQuantity(Integer.parseInt(quantity));
+                if("on".equals(active)){
+                    book.setActive(true);
+                }else{
+                    book.setActive(false);
+                }
+                
                 bookFacade.edit(book);
                 request.setAttribute("book", book);
                 request.setAttribute("info", "Книга изменена!");
                 request.getRequestDispatcher("/editBook.jsp").forward(request, response);
+                break;
+            case "/listAllBooks":
+                List<Book> listBooks = bookFacade.findAll();
+                request.setAttribute("listBooks", listBooks);
+                request.getRequestDispatcher("/listBooks.jsp").forward(request, response);
                 break;
             case "/listReaders":
                 List<Reader> listReaders = readerFacade.findAll();
@@ -153,7 +165,7 @@ public class AdminController extends HttpServlet {
                 request.setAttribute("takeOnBooks", listHistories);
                 request.getRequestDispatcher("/takeOnBooks.jsp")
                         .forward(request, response);
-                break;    
+                break; 
         }        
     }
 

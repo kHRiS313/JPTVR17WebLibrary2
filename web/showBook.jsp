@@ -18,7 +18,7 @@
         Название книги: ${book.author}<br>
         Год издания книги: ${book.publishedYear}<br>
         
-        <a href="editBook?id=${book.id}">Изменить</a>
+        <a href="editBook?id=${book.id}">Изменить</a><br>
         <a href="doTakeBook?bookId=${book.id}">Почитать (за деньги)</a>
     </body>
 </html>

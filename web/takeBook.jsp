@@ -18,13 +18,7 @@
         <p>${info}</p>
         <p>Вошедший пользователь: ${user.login}</p>
         <form action="doTakeBook" method="POST">
-            Список читателей:
-            <select name="readerId">
-                <c:forEach var="reader" items="${listReaders}">
-                    <option value="${reader.id}">${reader.name} ${reader.surname}</option>
-                </c:forEach>
-            </select>
-            <br>
+            
             Список книг: 
             <select name="bookId">
                 <c:forEach var="book" items="${listBooks}">

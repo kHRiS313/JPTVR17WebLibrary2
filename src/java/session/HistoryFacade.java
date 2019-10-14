@@ -6,6 +6,7 @@
 package session;
 
 import entity.History;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -31,8 +32,13 @@ public class HistoryFacade extends AbstractFacade<History> {
     }
 
     public List<History> findNotReturnedBook() {
-        return em.createQuery("SELECT h FROM History h WHERE h.returnBook = null")
+        try {
+            return em.createQuery("SELECT h FROM History h WHERE h.returnBook = null")
                 .getResultList();
+        } catch (Exception e) {
+            return new ArrayList<>();
+        }
+        
     }
     
 }

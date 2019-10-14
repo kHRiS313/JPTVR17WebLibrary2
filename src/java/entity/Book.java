@@ -25,9 +25,9 @@ public class Book implements Serializable{
     private String author;
     private String isbn;
     private int publishedYear;
-    private int quantity;
     private int countInLibrary;
     private int price;
+    private boolean active;
 
     public Book() {
     }
@@ -37,9 +37,8 @@ public class Book implements Serializable{
         this.author = author;
         this.isbn = isbn;
         this.publishedYear = publishedYear;
-        this.quantity = quantity;
-        this.countInLibrary = quantity;
         this.price = price;
+        this.active = true;
         
     }
 
@@ -83,18 +82,12 @@ public class Book implements Serializable{
         this.publishedYear = publishedYear;
     }
 
-    public int getQuantity() {
-        return quantity;
-    }
 
-    public void setQuantity(int quantity) {
-        this.setCountInLibrary(quantity - this.quantity + this.countInLibrary);
-        this.quantity = quantity;
-    }
+
 
     @Override
     public String toString() {
-        return "Book{" + "id=" + id + ", name=" + name + ", author=" + author + ", isbn=" + isbn + ", publishedYear=" + publishedYear + ", quantity=" + quantity+ ", countInLibrary=" + countInLibrary + ", price=" + price + '}';
+        return "Book{" + "id=" + id + ", name=" + name + ", author=" + author + ", isbn=" + isbn + ", publishedYear=" + publishedYear + ", countInLibrary=" + countInLibrary + ", price=" + price + '}';
     }
 
     public int getCountInLibrary() {
@@ -113,7 +106,6 @@ public class Book implements Serializable{
         hash = 17 * hash + Objects.hashCode(this.author);
         hash = 17 * hash + Objects.hashCode(this.isbn);
         hash = 17 * hash + this.publishedYear;
-        hash = 17 * hash + this.quantity;
         hash = 17 * hash + this.countInLibrary;
         return hash;
     }
@@ -131,9 +123,6 @@ public class Book implements Serializable{
         }
         final Book other = (Book) obj;
         if (this.publishedYear != other.publishedYear) {
-            return false;
-        }
-        if (this.quantity != other.quantity) {
             return false;
         }
         if (this.countInLibrary != other.countInLibrary) {
@@ -160,6 +149,14 @@ public class Book implements Serializable{
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     

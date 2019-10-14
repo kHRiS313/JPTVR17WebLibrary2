@@ -15,13 +15,20 @@
         <h1>Сетевая библиотека</h1>
         <p>${info}</p>
         <p>Вошедший пользователь: ${user.login}</p>
+        <br>
+        Для всех:<br>
         <a href="showLogin">Войти</a><br>
         <a href="logout">Выйти</a><br>
-        <a href="newBook">Добавить новую книгу</a><br>
         <a href="newReader">Регистрация</a><br>
+        <br>
+        Для вошедших пользователей:<br>
         <a href="listBooks">Список книг</a><br>
+        
+        <br>
+        Для администратора:<br>
+        <a href="newBook">Добавить новую книгу</a><br>
         <a href="listReaders">Список читателей</a><br>
-        <a href="takeBook">Купить книгу</a><br>
+        <a href="listAllBooks">Список всех книг</a><br>
         <a href="takeOnBooks">Список выданных книг</a><br>
     </body>
 </html>

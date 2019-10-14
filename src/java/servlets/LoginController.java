@@ -148,7 +148,7 @@ public class LoginController extends HttpServlet {
                 request.getRequestDispatcher("/newReader.jsp").forward(request, response);
                 break;
             case "/listBooks":
-                List<Book> listBooks = bookFacade.findAll();
+                List<Book> listBooks = bookFacade.findIsActiveBooks();
                 request.setAttribute("listBooks", listBooks);
                 request.getRequestDispatcher("/listBooks.jsp").forward(request, response);
                 break;

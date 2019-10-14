@@ -4,6 +4,7 @@
     Author     : Melnikov
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -21,7 +22,8 @@
             Автор книги: <input type="text" name="author" value="${book.author}"><br>
             Год издания: <input type="text" name="publishedYear"  value="${book.publishedYear}"><br>
             ISBN: <input type="text" name="isbn" value="${book.isbn}"><br>
-            Количество экземпляров: <input type="text" name="quantity" value="${book.quantity}"><br>
+            Количество экземпляров: <input type="text" name="countInLibrary" value="${book.countInLibrary}"><br>
+            Доступность книги: <input type="checkbox" name="active" <c:if test='${book.active}'>checked</c:if>><br>
             <input type="submit" value="Сохранить изменения">
         </form>
     </body>

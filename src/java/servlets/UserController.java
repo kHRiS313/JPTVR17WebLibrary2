@@ -11,6 +11,7 @@ import entity.Reader;
 import entity.User;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -26,15 +27,14 @@ import session.ReaderFacade;
  *
  * @author Melnikov
  */
-@WebServlet(name = "WebController", urlPatterns = {
-
-    "/doTakeBook",
+@WebServlet(name = "UserController", urlPatterns = {
+    
     "/showBook",
-  
-  
+    "/takeBook",
+    "/doTakeBook",
     
 })
-public class WebController extends HttpServlet {
+public class UserController extends HttpServlet {
 @EJB BookFacade bookFacade;
 @EJB ReaderFacade readerFacade;
 @EJB HistoryFacade historyFacade;
@@ -67,10 +67,22 @@ public class WebController extends HttpServlet {
         Reader reader = null;
         request.setAttribute("user", user);
         switch (path) {
+           
+            case "/showBook":
+                String bookId = request.getParameter("id");
+                Book book = bookFacade.find(Long.parseLong(bookId));
+                request.setAttribute("book", book);
+                request.getRequestDispatcher("/showBook.jsp").forward(request, response);
+                break;
+            case "/takeBook":
+                List<Book> listBooks = bookFacade.findTakeBook();
+                request.setAttribute("listBooks", listBooks);
+                request.getRequestDispatcher("/showBook.jsp").forward(request, response);
+                break;
             case "/doTakeBook":
-                String bookId = request.getParameter("bookId");
+                bookId = request.getParameter("bookId");
                 try {
-                    Book book = bookFacade.find(Long.parseLong(bookId));
+                    book = bookFacade.find(Long.parseLong(bookId));
                     if(book.getCountInLibrary()>0){
                         if(user.getReader().getMoney() > user.getReader().getMoney()-book.getPrice()){
                             book.setCountInLibrary(book.getCountInLibrary()-1);
@@ -92,12 +104,6 @@ public class WebController extends HttpServlet {
                 }
                 request.getRequestDispatcher("/listBooks")
                         .forward(request, response);
-                break;
-            case "/showBook":
-                bookId = request.getParameter("id");
-                Book book = bookFacade.find(Long.parseLong(bookId));
-                request.setAttribute("book", book);
-                request.getRequestDispatcher("/showBook.jsp").forward(request, response);
                 break;
         }
     }

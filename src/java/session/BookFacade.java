@@ -31,8 +31,18 @@ public class BookFacade extends AbstractFacade<Book> {
     }
 
     public List<Book> findTakeBook() {
-        return em.createQuery("SELECT b FROM Book b WHERE b.countInLibrary > 0")
+        return em.createQuery("SELECT b FROM Book b WHERE b.countInLibrary > 0 AND b.active = 'true'")
                 .getResultList();
+    }
+
+    public List<Book> findIsActiveBooks() {
+        try {
+            return em.createQuery("SELECT b FROM Book b WHERE b.active = 'true'")
+                .getResultList();
+        } catch (Exception e) {
+            return null;
+        }
+        
     }
 
    
