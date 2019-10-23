@@ -5,6 +5,7 @@
  */
 package session;
 
+import entity.Reader;
 import entity.User;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -50,6 +51,16 @@ public class UserFacade extends AbstractFacade<User> {
             return null;
         }
         
+    }
+
+    public User findByReader(Reader reader) {
+        try {
+            return (User) em.createQuery("SELECT u FROM User u WHERE u.reader = :reader")
+                    .setParameter("reader", reader)
+                    .getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
     }
     
 }

@@ -4,6 +4,7 @@
     Author     : Melnikov
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -17,18 +18,23 @@
         <p>Вошедший пользователь: ${user.login}</p>
         <br>
         Для всех:<br>
-        <a href="showLogin">Войти</a><br>
-        <a href="logout">Выйти</a><br>
+        <c:if test="${user eq null}">
+            <a href="showLogin">Войти</a><br>
+        </c:if>
+        <c:if test="${user ne null}">
+            <a href="logout">Выйти</a><br>
+        </c:if>
         <a href="newReader">Регистрация</a><br>
         <br>
-        Для вошедших пользователей:<br>
         <a href="listBooks">Список книг</a><br>
         
-        <br>
-        Для администратора:<br>
-        <a href="newBook">Добавить новую книгу</a><br>
-        <a href="listReaders">Список читателей</a><br>
-        <a href="listAllBooks">Список всех книг</a><br>
-        <a href="takeOnBooks">Список выданных книг</a><br>
+        <c:if test="${user ne null && user.login eq 'ivan'}">
+            <br>
+            Для администратора:<br>
+            <a href="newBook">Добавить новую книгу</a><br>
+            <a href="listReaders">Список читателей</a><br>
+            <a href="listAllBooks">Список всех книг</a><br>
+            <a href="takeOnBooks">Список выданных книг</a><br>
+        </c:if>
     </body>
 </html>

@@ -32,15 +32,17 @@ public class Book implements Serializable{
     public Book() {
     }
 
-    public Book(String name, String author, String isbn, int publishedYear, int quantity, int price) {
+    public Book(String name, String author, String isbn, int publishedYear, int countInLibrary, int price, boolean active) {
         this.name = name;
         this.author = author;
         this.isbn = isbn;
         this.publishedYear = publishedYear;
+        this.countInLibrary = countInLibrary;
         this.price = price;
-        this.active = true;
-        
+        this.active = active;
     }
+
+    
 
     public Long getId() {
         return id;

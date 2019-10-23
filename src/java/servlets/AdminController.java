@@ -22,6 +22,8 @@ import javax.servlet.http.HttpSession;
 import session.BookFacade;
 import session.HistoryFacade;
 import session.ReaderFacade;
+import session.UserFacade;
+import util.EncriptPass;
 
 /**
  *
@@ -43,6 +45,7 @@ public class AdminController extends HttpServlet {
     @EJB private BookFacade bookFacade;
     @EJB private ReaderFacade readerFacade;
     @EJB private HistoryFacade historyFacade;
+    @EJB private UserFacade userFacade;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -84,12 +87,12 @@ public class AdminController extends HttpServlet {
                 String author = request.getParameter("author");
                 String publichedYear = request.getParameter("publishedYear");
                 String isbn = request.getParameter("isbn");
-                String quantity = request.getParameter("quantity");
+                String countInLibrary = request.getParameter("countInLibrary");
                 String price = request.getParameter("price");
                 Book book = null;
                 try {
                     if(!"".equals(name) && !"".equals(author)){
-                        book = new Book( name, author, isbn, new Integer(publichedYear),Integer.parseInt(quantity),Integer.parseInt(price));
+                        book = new Book( name, author, isbn, new Integer(publichedYear),Integer.parseInt(countInLibrary),Integer.parseInt(price),true);
                         bookFacade.create(book);
                         request.setAttribute("info", "Книга \"" + book.getName()+"\" добавлена");
                     }else{
@@ -112,12 +115,14 @@ public class AdminController extends HttpServlet {
                 author = request.getParameter("author");
                 publichedYear = request.getParameter("publishedYear");
                 isbn = request.getParameter("isbn");
+                countInLibrary = request.getParameter("countInLibrary");
                 String active = request.getParameter("active");
                 book = bookFacade.find(Long.parseLong(id));
                 book.setName(name);
                 book.setAuthor(author);
                 book.setPublishedYear(Integer.parseInt(publichedYear));
                 book.setIsbn(isbn);
+                book.setCountInLibrary(Integer.parseInt(countInLibrary));
                 if("on".equals(active)){
                     book.setActive(true);
                 }else{
@@ -127,7 +132,7 @@ public class AdminController extends HttpServlet {
                 bookFacade.edit(book);
                 request.setAttribute("book", book);
                 request.setAttribute("info", "Книга изменена!");
-                request.getRequestDispatcher("/editBook.jsp").forward(request, response);
+                request.getRequestDispatcher("/listBooks.jsp").forward(request, response);
                 break;
             case "/listAllBooks":
                 List<Book> listBooks = bookFacade.findAll();
@@ -143,6 +148,8 @@ public class AdminController extends HttpServlet {
                 id = request.getParameter("id");
                 Reader reader = readerFacade.find(Long.parseLong(id));
                 request.setAttribute("reader", reader);
+                User changeUser = userFacade.findByReader(reader);
+                request.setAttribute("changeUser", changeUser);
                 request.getRequestDispatcher("/editReader.jsp")
                         .forward(request, response);
                 break;
@@ -151,14 +158,44 @@ public class AdminController extends HttpServlet {
                 name = request.getParameter("name");
                 String surname = request.getParameter("surname");
                 String phone = request.getParameter("phone");
-                reader = readerFacade.find(Long.parseLong(id));
-                reader.setName(name);
-                reader.setSurname(surname);
-                reader.setPhone(phone);
-                //Запись данных в базу
-                readerFacade.edit(reader);
-                request.setAttribute("reader", reader);
-                request.getRequestDispatcher("/listReaders").forward(request, response);
+                String login = request.getParameter("login");
+                String password1 = request.getParameter("password1");
+                String password2 = request.getParameter("password2");
+                if(!password1.equals(password2)){
+                    request.setAttribute("info", "Не совпадают пароли");
+                    request.setAttribute("id", id);
+                    request.getRequestDispatcher("/editReader")
+                        .forward(request, response);
+                    break;
+                }
+                changeUser = userFacade.findByLogin(login);
+                if(changeUser == null){
+                    request.setAttribute("info", "Нет такого пользователя");
+                    request.setAttribute("id", id);
+                    request.getRequestDispatcher("/editReader")
+                        .forward(request, response);
+                    break;
+                }
+                changeUser.setLogin(login);
+                EncriptPass ep = new EncriptPass();
+                String encriptPassword = ep.setEncriptPass(password1, changeUser.getSalts());
+                changeUser.setPassword(encriptPassword);
+                try {
+                    userFacade.edit(changeUser);
+                    reader = readerFacade.find(Long.parseLong(id));
+                    reader.setName(name);
+                    reader.setSurname(surname);
+                    reader.setPhone(phone);
+                    //Запись данных в базу
+                    readerFacade.edit(reader);
+                    request.setAttribute("reader", reader);
+                    request.getRequestDispatcher("/listReaders").forward(request, response);
+                } catch (Exception e) {
+                   request.setAttribute("info", "Данные не изменены");
+                    request.setAttribute("id", id);
+                    request.getRequestDispatcher("/editReader")
+                        .forward(request, response);
+                }
                 break;
             case "/takeOnBooks":
                 List<History> listHistories = historyFacade.findNotReturnedBook();
