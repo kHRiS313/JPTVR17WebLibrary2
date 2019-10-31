@@ -22,6 +22,7 @@ import javax.servlet.http.HttpSession;
 import session.BookFacade;
 import session.HistoryFacade;
 import session.ReaderFacade;
+import util.RoleManager;
 
 /**
  *
@@ -64,10 +65,15 @@ public class UserController extends HttpServlet {
             return; 
         }
         User user = (User) session.getAttribute("user");
+        RoleManager rm = new RoleManager();
+        if(!rm.isRoleUser("USER", user)){
+            request.setAttribute("info", "У вас нет прав доступа, войдите в систему");
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
+            return; 
+        }
         Reader reader = null;
         request.setAttribute("user", user);
         switch (path) {
-           
             case "/showBook":
                 String bookId = request.getParameter("id");
                 Book book = bookFacade.find(Long.parseLong(bookId));

@@ -24,6 +24,7 @@ import session.HistoryFacade;
 import session.ReaderFacade;
 import session.UserFacade;
 import util.EncriptPass;
+import util.RoleManager;
 
 /**
  *
@@ -72,7 +73,8 @@ public class AdminController extends HttpServlet {
             return; 
         }
         User user = (User) session.getAttribute("user");
-        if(!"admin".equals(user.getLogin())){
+        RoleManager rm = new RoleManager();
+        if(!rm.isRoleUser("ADMIN", user)){
             request.setAttribute("info", "У вас нет прав доступа, войдите в систему");
             request.getRequestDispatcher("/index.jsp").forward(request, response);
             return; 
