@@ -72,7 +72,7 @@ public class AdminController extends HttpServlet {
             return; 
         }
         User user = (User) session.getAttribute("user");
-        if(!"ivan".equals(user.getLogin())){
+        if(!"admin".equals(user.getLogin())){
             request.setAttribute("info", "У вас нет прав доступа, войдите в систему");
             request.getRequestDispatcher("/index.jsp").forward(request, response);
             return; 

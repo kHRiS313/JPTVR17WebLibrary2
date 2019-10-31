@@ -19,7 +19,7 @@
         Название книги: ${book.author}<br>
         Год издания книги: ${book.publishedYear}<br>
         Количество книг в наличии: ${book.countInLibrary}<br>
-        <c:if test="${user ne null && user.login eq 'ivan'}">
+        <c:if test="${user ne null && user.login eq 'admin'}">
             <a href="editBook?id=${book.id}">Изменить</a><br>
         </c:if>
         <c:if test="${user ne null}">     

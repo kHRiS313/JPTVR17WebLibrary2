@@ -28,7 +28,7 @@
         <br>
         <a href="listBooks">Список книг</a><br>
         
-        <c:if test="${user ne null && user.login eq 'ivan'}">
+        <c:if test="${user ne null && user.login eq 'admin'}">
             <br>
             Для администратора:<br>
             <a href="newBook">Добавить новую книгу</a><br>
