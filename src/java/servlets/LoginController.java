@@ -170,6 +170,11 @@ public class LoginController extends HttpServlet {
                         user = new User(login, salts, password, reader);
                         try {
                             userFacade.create(user);
+                            Roles role = rolesFacade.getRoleByName("USER");
+                            UserRoles userRoles = new UserRoles();
+                            userRoles.setUser(user);
+                            userRoles.setRole(role);
+                            userRolesFacade.create(userRoles);
                         } catch (Exception e) {
                            readerFacade.remove(reader);
                            throw new Exception(e);

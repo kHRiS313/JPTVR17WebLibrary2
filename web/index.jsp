@@ -35,6 +35,7 @@
             <a href="listReaders">Список читателей</a><br>
             <a href="listAllBooks">Список всех книг</a><br>
             <a href="takeOnBooks">Список выданных книг</a><br>
+            <a href="showAdmin">Изменить роль пользователя</a><br>
         </c:if>
     </body>
 </html>

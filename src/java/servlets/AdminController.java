@@ -8,10 +8,14 @@ package servlets;
 import entity.Book;
 import entity.History;
 import entity.Reader;
+import entity.Roles;
 import entity.User;
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,6 +26,7 @@ import javax.servlet.http.HttpSession;
 import session.BookFacade;
 import session.HistoryFacade;
 import session.ReaderFacade;
+import session.RolesFacade;
 import session.UserFacade;
 import util.EncriptPass;
 import util.RoleManager;
@@ -40,6 +45,9 @@ import util.RoleManager;
     "/listReaders",
     "/takeOnBooks",
     "/listAllBooks",
+    "/showAdmin",
+    "/changeRole",
+    
     
 })
 public class AdminController extends HttpServlet {
@@ -47,6 +55,7 @@ public class AdminController extends HttpServlet {
     @EJB private ReaderFacade readerFacade;
     @EJB private HistoryFacade historyFacade;
     @EJB private UserFacade userFacade;
+    @EJB private RolesFacade rolesFacade;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -205,6 +214,38 @@ public class AdminController extends HttpServlet {
                 request.getRequestDispatcher("/takeOnBooks.jsp")
                         .forward(request, response);
                 break; 
+            case "/showAdmin":
+                List<User> listUsers = userFacade.findAll();
+                List<Roles> listRoles = rolesFacade.findAll();
+                Map<User,String> mapUsers = new HashMap<>();
+                listUsers.forEach((u) -> {
+                    if(!"admin".equals(u.getLogin())){
+                        mapUsers.put(u,rm.getTopRoleName(u));
+                    } 
+                    
+                });
+                request.setAttribute("listRoles", listRoles);
+                request.setAttribute("mapUsers", mapUsers);
+                request.getRequestDispatcher("/WEB-INF/showAdmin.jsp")
+                        .forward(request, response);
+                break;
+            case "/changeRole":
+                String roleId = request.getParameter("roleId");
+                String userId = request.getParameter("userId");
+                if(roleId == null || "".equals(roleId) 
+                        || userId == null || "".equals(userId)){
+                    request.setAttribute("info", "Не выбран пользователь или роль");
+                    request.getRequestDispatcher("/showAdmin")
+                        .forward(request, response);
+                    break;
+                }
+                Roles role = rolesFacade.find(Long.parseLong(roleId));
+                user = userFacade.find(Long.parseLong(userId));
+                rm.setRoleUser(role,user);
+                request.getRequestDispatcher("/showAdmin")
+                        .forward(request, response);
+                break;
+            
         }        
     }
 
