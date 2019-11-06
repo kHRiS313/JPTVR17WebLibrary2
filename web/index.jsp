@@ -10,31 +10,34 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Сетевая библиотека имени JPTVR17</title>
     </head>
     <body>
         <h1>Сетевая библиотека</h1>
         <p>${info}</p>
-        <p>Вошедший пользователь: ${user.login}</p>
+        
         <br>
         Для всех:<br>
-        <c:if test="${user eq null}">
+        <c:if test="${userRole eq null}">
             <a href="showLogin">Войти</a><br>
         </c:if>
-        <c:if test="${user ne null}">
+        <c:if test="${userRole ne null}">
             <a href="logout">Выйти</a><br>
         </c:if>
         <a href="newReader">Регистрация</a><br>
         <br>
         <a href="listBooks">Список книг</a><br>
         
-        <c:if test="${user ne null && user.login eq 'admin'}">
+        <c:if test="${userRole eq 'MANAGER' || userRole eq 'ADMIN'}">
             <br>
             Для администратора:<br>
             <a href="newBook">Добавить новую книгу</a><br>
             <a href="listReaders">Список читателей</a><br>
             <a href="listAllBooks">Список всех книг</a><br>
             <a href="takeOnBooks">Список выданных книг</a><br>
+            
+        </c:if>
+        <c:if test="${userRole eq 'ADMIN'}">
             <a href="showAdmin">Изменить роль пользователя</a><br>
         </c:if>
     </body>

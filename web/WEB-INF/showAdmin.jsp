@@ -14,6 +14,8 @@
     </head>
     <body>
         <h1>Редактирование ролей у пользователей!</h1>
+        <p>${info}</p>
+        <a href="index">Главная страница</a><br>
         <form action="changeRole" method="POST">
             Список пользователей: 
             <select name="userId">

@@ -26,6 +26,7 @@ import session.RolesFacade;
 import session.UserFacade;
 import session.UserRolesFacade;
 import util.EncriptPass;
+import util.RoleManager;
 
 /**
  *
@@ -101,8 +102,10 @@ public class LoginController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
         EncriptPass ep = new EncriptPass();
+        RoleManager rm = new RoleManager();
         String path = request.getServletPath();
         switch (path) {
+            
             case "/showLogin":
                 request.getRequestDispatcher("/showLogin.jsp")
                         .forward(request, response);
@@ -125,6 +128,7 @@ public class LoginController extends HttpServlet {
                 HttpSession session = request.getSession(true);
                 session.setAttribute("user", user);
                 request.setAttribute("info", "Вы вошли в систему как "+login);
+                request.setAttribute("userRole", rm.getTopRoleName(user));
                 request.getRequestDispatcher("/index.jsp")
                         .forward(request, response);
                 break;

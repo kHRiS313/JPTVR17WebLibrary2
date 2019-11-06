@@ -11,9 +11,7 @@ import entity.Reader;
 import entity.Roles;
 import entity.User;
 import java.io.IOException;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import javax.ejb.EJB;
@@ -83,12 +81,12 @@ public class AdminController extends HttpServlet {
         }
         User user = (User) session.getAttribute("user");
         RoleManager rm = new RoleManager();
-        if(!rm.isRoleUser("ADMIN", user)){
+        if(!rm.isRoleUser("MANAGER", user)){
             request.setAttribute("info", "У вас нет прав доступа, войдите в систему");
             request.getRequestDispatcher("/index.jsp").forward(request, response);
             return; 
         }
-        request.setAttribute("user", user);
+        request.setAttribute("userRole", rm.getTopRoleName(user));
         switch (path){ 
             case "/newBook":
                 request.getRequestDispatcher("/newBook.jsp").forward(request, response);
@@ -143,7 +141,7 @@ public class AdminController extends HttpServlet {
                 bookFacade.edit(book);
                 request.setAttribute("book", book);
                 request.setAttribute("info", "Книга изменена!");
-                request.getRequestDispatcher("/listBooks.jsp").forward(request, response);
+                request.getRequestDispatcher("/listBooks").forward(request, response);
                 break;
             case "/listAllBooks":
                 List<Book> listBooks = bookFacade.findAll();
@@ -158,8 +156,15 @@ public class AdminController extends HttpServlet {
             case "/editReader":
                 id = request.getParameter("id");
                 Reader reader = readerFacade.find(Long.parseLong(id));
-                request.setAttribute("reader", reader);
                 User changeUser = userFacade.findByReader(reader);
+                if("admin".equals(changeUser.getLogin())){
+                    if(!"admin".equals(user.getLogin())){
+                        request.setAttribute("info", "У вас нет прав, войдите в систему как администратор");
+                        request.getRequestDispatcher("/index.jsp").forward(request, response);
+                        break;
+                    }
+                }
+                request.setAttribute("reader", reader);
                 request.setAttribute("changeUser", changeUser);
                 request.getRequestDispatcher("/editReader.jsp")
                         .forward(request, response);
@@ -232,8 +237,8 @@ public class AdminController extends HttpServlet {
             case "/changeRole":
                 String roleId = request.getParameter("roleId");
                 String userId = request.getParameter("userId");
-                if(roleId == null || "".equals(roleId) 
-                        || userId == null || "".equals(userId)){
+                if(roleId == null || "#".equals(roleId) 
+                        || userId == null || "#".equals(userId)){
                     request.setAttribute("info", "Не выбран пользователь или роль");
                     request.getRequestDispatcher("/showAdmin")
                         .forward(request, response);
@@ -242,6 +247,9 @@ public class AdminController extends HttpServlet {
                 Roles role = rolesFacade.find(Long.parseLong(roleId));
                 user = userFacade.find(Long.parseLong(userId));
                 rm.setRoleUser(role,user);
+                request.setAttribute("info", 
+                        "Роль пользователя \""+user.getLogin()
+                                +"\" изменена на \""+role.getRole()+"\"");
                 request.getRequestDispatcher("/showAdmin")
                         .forward(request, response);
                 break;

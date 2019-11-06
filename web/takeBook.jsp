@@ -10,13 +10,13 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Выдать книгу</title>
     </head>
     <body>
         <h1>Выдать книгу</h1>
-        <a href="index.jsp">Главная страница</a>
+        <a href="index">Главная страница</a>
         <p>${info}</p>
-        <p>Вошедший пользователь: ${user.login}</p>
+        
         <form action="doTakeBook" method="POST">
             
             Список книг: 

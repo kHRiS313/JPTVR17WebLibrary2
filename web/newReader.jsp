@@ -14,7 +14,7 @@
     </head>
     <body>
         <h1>Новый читатель!</h1>
-        <a href="index.jsp">Главная страница</a>
+        <a href="index">Главная страница</a>
         <p>${info}</p>
         <p>Вошедший пользователь: ${user.login}</p>
         <form action="addReader" method="POST">
@@ -27,9 +27,7 @@
             Повторить пароль: <input type="password" name="password2"><br>
             <input type="submit" value="Добавить читателя">
         </form>
-        <c:if test="${reader ne null}">
-            
-        </c:if>
+       
         
     </body>
 </html>

@@ -10,13 +10,13 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Список выданных книг библиотеки</title>
     </head>
     <body>
         <h1>Список выданных книг библиотеки</h1>
         <p>${info}</p>
-        <p>Вошедший пользователь: ${user.login}</p>
-        <a href="index.jsp">Главная страница</a>
+        
+        <a href="index">Главная страница</a>
         <ul>
             <c:forEach var="history" items="${takeOnBooks}">
                 <li>

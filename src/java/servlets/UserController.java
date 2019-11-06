@@ -29,7 +29,7 @@ import util.RoleManager;
  * @author Melnikov
  */
 @WebServlet(name = "UserController", urlPatterns = {
-    
+    "/index",
     "/showBook",
     "/takeBook",
     "/doTakeBook",
@@ -72,8 +72,11 @@ public class UserController extends HttpServlet {
             return; 
         }
         Reader reader = null;
-        request.setAttribute("user", user);
+        request.setAttribute("userRole", rm.getTopRoleName(user));
         switch (path) {
+            case "/index":
+                request.getRequestDispatcher("/index.jsp").forward(request, response);
+                break;
             case "/showBook":
                 String bookId = request.getParameter("id");
                 Book book = bookFacade.find(Long.parseLong(bookId));

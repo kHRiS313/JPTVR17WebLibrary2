@@ -10,19 +10,19 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Книга ${book.name}</title>
     </head>
     <body>
         <h1>Книга</h1>
-        <a href="index.jsp">Главная страница</a><br>
+        <a href="index">Главная страница</a><br>
         Название книги: ${book.name}<br>
         Название книги: ${book.author}<br>
         Год издания книги: ${book.publishedYear}<br>
         Количество книг в наличии: ${book.countInLibrary}<br>
-        <c:if test="${user ne null && user.login eq 'admin'}">
+        <c:if test="${userRole eq 'MANAGER' || userRole eq 'ADMIN'}">
             <a href="editBook?id=${book.id}">Изменить</a><br>
         </c:if>
-        <c:if test="${user ne null}">     
+        <c:if test="${userRole eq 'USER' || userRole eq 'MANAGER' || userRole eq 'ADMIN'}">     
             <a href="doTakeBook?bookId=${book.id}">Почитать (за деньги)</a>
         </c:if>
     </body>
