@@ -48,6 +48,7 @@ public class LoginController extends HttpServlet {
    @EJB BookFacade bookFacade;
    @EJB RolesFacade rolesFacade;
    @EJB UserRolesFacade userRolesFacade;
+    private Object money;
 
     @Override
     public void init() throws ServletException {

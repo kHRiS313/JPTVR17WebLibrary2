@@ -5,22 +5,24 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Вход в систему</title>
-    </head>
-    <body>
-        <h1>Аутентификация</h1>
-        <p>${info}</p>
-        <form action="login" method="POST">
-            Логин: <input type="text" name="login">
+<form action="login" method="POST">
+    <div class="card col-6 text-center offset-3" style="width: 24 rem; margin-top: 50px">
+      <div class="card-body">
+            <h5 class="card-title">Аутентификация</h5>
+            <p class="card-text">${info}</p>
+            <div class="form-group">
+            <label for="login">Логин:</label>
+            <input type="text" class="form-control" name="login" id="login">
+
+            <div class="form-group">
+            <label for="password">Пароль</label>
+            <input type="password" class="form-control" id="password">
             <br>
-            Пароль: <input type="password" name="password">
-            <br>
-            <input type="submit" value="Войти">
-        </form>
-        Нет учетной записи? <a href="newReader">Зарегистрироваться</a><br>
-    </body>
-</html>
+
+            <input class="btn btn-success" type="submit" value="Войти">
+          </div>
+        </div>
+      </div>
+        <div class="text-center" style="margin-top:10px;margin-bottom: 3%"> Нет учетной записи? <a href="newReader">Зарегистрироваться</a><br> </div>
+        </div>
+</form>
