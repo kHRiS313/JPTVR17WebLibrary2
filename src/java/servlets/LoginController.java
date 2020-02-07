@@ -39,6 +39,7 @@ import util.RoleManager;
     "/newReader",
     "/addReader",
     "/listBooks",
+    "/listNewBooks",
     
 
 })
@@ -210,7 +211,24 @@ public class LoginController extends HttpServlet {
                 request.getRequestDispatcher("/listBooks.jsp").forward(request, response);
                 break;
         }
-
+        case "/listNewBooks":
+            List<Book> listNewBook = bookFacade.getListNewBooks();
+            BookJsonBuilder bookJsonBuilder = new BookJsonBuilder();
+            JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
+            for(Book book : listNewBooks){
+            arrayBuilder.add(bookJsonBuilder.createJsonBook(book));
+    }
+        try (Writer writer = new StringWriter()){
+        Json.createWriter(writer).write(arrayBuilder)());
+        json = writer.toString();
+    }
+    try (PrintWriter out = response.getWriter()) {
+        out.println(json);
+        
+    }
+    
+    
+    break;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

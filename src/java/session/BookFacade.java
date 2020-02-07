@@ -44,7 +44,12 @@ public class BookFacade extends AbstractFacade<Book> {
         }
         
     }
-
+    public List<Book> getListNewBooks() {
+        try {
+            return em.createQuery("SELECT b FROM Book b")
+            .getResultList();
+        } catch (Exception e) {
+            return null;
+    }
    
     
-}
